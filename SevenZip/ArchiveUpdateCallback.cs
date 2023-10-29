@@ -178,7 +178,7 @@ namespace SevenZip
         /// <summary>
         /// Initializes a new instance of the ArchiveUpdateCallback class
         /// </summary>
-        /// <param name="streamDict">Dictionary&lt;file stream, name of the archive entry&gt;</param>
+        /// <param name="streamInfos">Dictionary file stream, name of the archive entry </param>
         /// <param name="password">The archive password</param>
         /// <param name="compressor">The owner of the callback</param>
         /// <param name="updateData">The compression parameters.</param>

@@ -1,6 +1,5 @@
 namespace SevenZip.Sdk.Compression.RangeCoder
 {
-    using System;
     using System.IO;
 
     internal class Encoder
@@ -64,18 +63,18 @@ namespace SevenZip.Sdk.Compression.RangeCoder
 
         public void ShiftLow()
         {
-            if ((uint) Low < 0xFF000000 || (uint) (Low >> 32) == 1)
+            if ((uint)Low < 0xFF000000 || (uint)(Low >> 32) == 1)
             {
                 byte temp = _cache;
                 do
                 {
-                    Stream.WriteByte((byte) (temp + (Low >> 32)));
+                    Stream.WriteByte((byte)(temp + (Low >> 32)));
                     temp = 0xFF;
                 } while (--_cacheSize != 0);
-                _cache = (byte) (((uint) Low) >> 24);
+                _cache = (byte)(((uint)Low) >> 24);
             }
             _cacheSize++;
-            Low = ((uint) Low) << 8;
+            Low = ((uint)Low) << 8;
         }
 
         public void EncodeDirectBits(uint v, int numTotalBits)
@@ -123,6 +122,7 @@ namespace SevenZip.Sdk.Compression.RangeCoder
         public const uint kTopValue = (1 << 24);
         public uint Code;
         public uint Range;
+
         // public Buffer.InBuffer Stream = new Buffer.InBuffer(1 << 16);
         public Stream Stream;
 
@@ -134,7 +134,7 @@ namespace SevenZip.Sdk.Compression.RangeCoder
             Code = 0;
             Range = 0xFFFFFFFF;
             for (int i = 0; i < 5; i++)
-                Code = (Code << 8) | (byte) Stream.ReadByte();
+                Code = (Code << 8) | (byte)Stream.ReadByte();
         }
 
         public void ReleaseStream()
@@ -200,7 +200,7 @@ namespace SevenZip.Sdk.Compression.RangeCoder
 
                 if (range < kTopValue)
                 {
-                    code = (code << 8) | (byte) Stream.ReadByte();
+                    code = (code << 8) | (byte)Stream.ReadByte();
                     range <<= 8;
                 }
             }

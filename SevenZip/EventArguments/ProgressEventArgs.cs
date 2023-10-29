@@ -7,9 +7,27 @@ namespace SevenZip
     /// </summary>
     public sealed class ProgressEventArgs : PercentDoneEventArgs
     {
-        private readonly byte _delta;
+        private Object _sourceRequest;
 
-        public Object SourceRequest;
+        /// <summary>
+        /// Gets or sets the source request.
+        /// </summary>
+        /// <value>The source request.</value>
+        public Object SourceRequest
+        {
+            get
+            {
+                return _sourceRequest;
+            }
+            /// <summary>
+            /// Sets the source request.
+            /// </summary>
+            /// <param name = "value" > The source uncompressed stream.</param>
+            set
+            {
+                _sourceRequest = value;
+            }
+        }
 
         /// <summary>
         /// Initializes a new instance of the ProgressEventArgs class.
@@ -25,6 +43,7 @@ namespace SevenZip
         /// <summary>
         /// Gets the change in done work percentage.
         /// </summary>
+        /// <value>The change in done work percentage.</value>
         public byte PercentDelta { get; }
     }
 }

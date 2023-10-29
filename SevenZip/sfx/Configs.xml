@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <?xml-stylesheet type="text/xsl" href="Configs.xslt"?>
 <sfxConfigs>
-	<config name="Simple by Igor Pavlov" modules="7z.sfx;7zCon.sfx"/>
+	<config name="Simple by Igor Pavlov" modules="7z.sfx;7zCon.sfx" />
 	<config name="Installer by Igor Pavlov" modules="7zS.sfx;7zSD.sfx">
 		<id description="Title for messages" command="Title" />
 		<id description="Begin Prompt message." command="BeginPrompt" />

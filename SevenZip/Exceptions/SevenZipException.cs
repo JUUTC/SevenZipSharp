@@ -54,6 +54,7 @@
         /// <param name="inner">Inner exception occurred</param>
         public SevenZipException(string defaultMessage, Exception inner)
             : base(defaultMessage, inner) { }
+
         /// <summary>
         /// Initializes a new instance of the SevenZipException class
         /// </summary>

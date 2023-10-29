@@ -423,8 +423,6 @@
             }
         }
 
-        }
-
         /// <summary>
         /// Compresses the specified list of streaminfos. The compressor will trigger the event ProvideNextSourceStream each time it is ready to read the next file. 
         /// The caller will provide a readable stream for the requested file.

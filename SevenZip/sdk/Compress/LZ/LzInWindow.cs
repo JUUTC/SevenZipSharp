@@ -1,6 +1,5 @@
 namespace SevenZip.Sdk.Compression.LZ
 {
-    using System;
     using System.IO;
 
     /// <summary>
@@ -70,10 +69,10 @@ namespace SevenZip.Sdk.Compression.LZ
                 return;
             while (true)
             {
-                var size = (int) ((0 - _bufferOffset) + _blockSize - _streamPos);
+                var size = (int)((0 - _bufferOffset) + _blockSize - _streamPos);
                 if (size == 0)
                     return;
-                int numReadBytes = _stream.Read(_bufferBase, (int) (_bufferOffset + _streamPos), size);
+                int numReadBytes = _stream.Read(_bufferBase, (int)(_bufferOffset + _streamPos), size);
                 if (numReadBytes == 0)
                 {
                     _posLimit = _streamPos;
@@ -84,7 +83,7 @@ namespace SevenZip.Sdk.Compression.LZ
                     _streamEndWasReached = true;
                     return;
                 }
-                _streamPos += (uint) numReadBytes;
+                _streamPos += (uint)numReadBytes;
                 if (_streamPos >= _pos + _keepSizeAfter)
                     _posLimit = _streamPos - _keepSizeAfter;
             }
@@ -156,10 +155,10 @@ namespace SevenZip.Sdk.Compression.LZ
         {
             if (_streamEndWasReached)
                 if ((_pos + index) + limit > _streamPos)
-                    limit = _streamPos - (uint) (_pos + index);
+                    limit = _streamPos - (uint)(_pos + index);
             distance++;
             // Byte *pby = _buffer + (size_t)_pos + index;
-            uint pby = _bufferOffset + _pos + (uint) index;
+            uint pby = _bufferOffset + _pos + (uint)index;
 
             uint i;
             for (i = 0; i < limit && _bufferBase[pby + i] == _bufferBase[pby + i - distance]; i++) ;
@@ -173,10 +172,10 @@ namespace SevenZip.Sdk.Compression.LZ
 
         public void ReduceOffsets(int subValue)
         {
-            _bufferOffset += (uint) subValue;
-            _posLimit -= (uint) subValue;
-            _pos -= (uint) subValue;
-            _streamPos -= (uint) subValue;
+            _bufferOffset += (uint)subValue;
+            _posLimit -= (uint)subValue;
+            _pos -= (uint)subValue;
+            _streamPos -= (uint)subValue;
         }
     }
 }

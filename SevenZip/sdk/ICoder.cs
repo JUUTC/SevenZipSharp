@@ -9,7 +9,9 @@ namespace SevenZip.Sdk
     [Serializable]
     internal class DataErrorException : ApplicationException
     {
-        public DataErrorException() : base("Data Error") {}
+        public DataErrorException() : base("Data Error")
+        {
+        }
     }
 
     /// <summary>
@@ -18,7 +20,9 @@ namespace SevenZip.Sdk
     [Serializable]
     internal class InvalidParamException : ApplicationException
     {
-        public InvalidParamException() : base("Invalid Parameter") {}
+        public InvalidParamException() : base("Invalid Parameter")
+        {
+        }
     }
 
     /// <summary>
@@ -36,7 +40,7 @@ namespace SevenZip.Sdk
         /// Processed output size. -1 if unknown.
         /// </param>
         void SetProgress(long inSize, long outSize);
-    } ;
+    };
 
     /// <summary>
     /// Stream coder interface
@@ -66,14 +70,14 @@ namespace SevenZip.Sdk
         /// </exception>
         void Code(Stream inStream, Stream outStream,
                   long inSize, long outSize, ICodeProgress progress);
-    } ;
+    };
 
     /*
 	public interface ICoder2
 	{
 		 void Code(ISequentialInStream []inStreams,
-				const UInt64 []inSizes, 
-				ISequentialOutStream []outStreams, 
+				const UInt64 []inSizes,
+				ISequentialOutStream []outStreams,
 				UInt64 []outSizes,
 				ICodeProgress progress);
 	};
@@ -88,63 +92,77 @@ namespace SevenZip.Sdk
         /// Specifies default property.
         /// </summary>
         DefaultProp = 0,
+
         /// <summary>
         /// Specifies size of dictionary.
         /// </summary>
         DictionarySize,
+
         /// <summary>
         /// Specifies size of memory for PPM*.
         /// </summary>
         UsedMemorySize,
+
         /// <summary>
         /// Specifies order for PPM methods.
         /// </summary>
         Order,
+
         /// <summary>
         /// Specifies Block Size.
         /// </summary>
         BlockSize,
+
         /// <summary>
         /// Specifies number of postion state bits for LZMA (0 &lt;= x &lt;= 4).
         /// </summary>
         PosStateBits,
+
         /// <summary>
         /// Specifies number of literal context bits for LZMA (0 &lt;= x &lt;= 8).
         /// </summary>
         LitContextBits,
+
         /// <summary>
         /// Specifies number of literal position bits for LZMA (0 &lt;= x &lt;= 4).
         /// </summary>
         LitPosBits,
+
         /// <summary>
         /// Specifies number of fast bytes for LZ*.
         /// </summary>
         NumFastBytes,
+
         /// <summary>
         /// Specifies match finder. LZMA: "BT2", "BT4" or "BT4B".
         /// </summary>
         MatchFinder,
+
         /// <summary>
         /// Specifies the number of match finder cyckes.
         /// </summary>
         MatchFinderCycles,
+
         /// <summary>
         /// Specifies number of passes.
         /// </summary>
         NumPasses,
+
         /// <summary>
         /// Specifies number of algorithm.
         /// </summary>
         Algorithm,
+
         /// <summary>
         /// Specifies the number of threads.
         /// </summary>
         NumThreads,
+
         /// <summary>
         /// Specifies mode with end marker.
         /// </summary>
         EndMarker = 0x490
-    } ;
+    };
 
     /// <summary>
     /// The ISetCoderProperties interface
@@ -152,7 +170,7 @@ namespace SevenZip.Sdk
     internal interface ISetCoderProperties
     {
         void SetCoderProperties(CoderPropId[] propIDs, object[] properties);
-    } ;
+    };
 
     /// <summary>
     /// The IWriteCoderProperties interface

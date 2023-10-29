@@ -10,7 +10,7 @@ namespace SevenZip.Sdk.Compression.LZ
         private const uint kHash2Size = 1 << 10;
         private const uint kHash3Offset = kHash2Size;
         private const uint kHash3Size = 1 << 16;
-        private const uint kMaxValForNormalize = ((uint) 1 << 31) - 1;
+        private const uint kMaxValForNormalize = ((uint)1 << 31) - 1;
         private const uint kStartMaxLen = 1;
         private uint _cutValue = 0xFF;
         private uint _cyclicBufferPos;
@@ -75,7 +75,7 @@ namespace SevenZip.Sdk.Compression.LZ
             _cutValue = 16 + (matchMaxLen >> 1);
 
             uint windowReservSize = (historySize + keepAddBufferBefore +
-                                       matchMaxLen + keepAddBufferAfter)/2 + 256;
+                                       matchMaxLen + keepAddBufferAfter) / 2 + 256;
 
             base.Create(historySize + keepAddBufferBefore, matchMaxLen + keepAddBufferAfter, windowReservSize);
 
@@ -83,7 +83,7 @@ namespace SevenZip.Sdk.Compression.LZ
 
             uint cyclicBufferSize = historySize + 1;
             if (_cyclicBufferSize != cyclicBufferSize)
-                _son = new uint[(_cyclicBufferSize = cyclicBufferSize)*2];
+                _son = new uint[(_cyclicBufferSize = cyclicBufferSize) * 2];
 
             uint hs = kBT2HashSize;
 
@@ -130,13 +130,13 @@ namespace SevenZip.Sdk.Compression.LZ
             if (HASH_ARRAY)
             {
                 uint temp = CRC.Table[_bufferBase[cur]] ^ _bufferBase[cur + 1];
-                hash2Value = (temp & (((int) kHash2Size) - 1));
-                temp ^= (uint) ((_bufferBase[cur + 2]) << 8);
-                hash3Value = (temp & (((int) kHash3Size) - 1));
+                hash2Value = (temp & (((int)kHash2Size) - 1));
+                temp ^= (uint)((_bufferBase[cur + 2]) << 8);
+                hash3Value = (temp & (((int)kHash3Size) - 1));
                 hashValue = (temp ^ (CRC.Table[_bufferBase[cur + 3]] << 5)) & _hashMask;
             }
             else
-                hashValue = _bufferBase[cur] ^ ((uint) (_bufferBase[cur + 1]) << 8);
+                hashValue = _bufferBase[cur] ^ ((uint)(_bufferBase[cur + 1]) << 8);
 
             uint curMatch = _hash[kFixHashSize + hashValue];
             if (HASH_ARRAY)
@@ -267,15 +267,15 @@ namespace SevenZip.Sdk.Compression.LZ
                 if (HASH_ARRAY)
                 {
                     uint temp = CRC.Table[_bufferBase[cur]] ^ _bufferBase[cur + 1];
-                    uint hash2Value = (temp & (((int) kHash2Size) - 1));
+                    uint hash2Value = (temp & (((int)kHash2Size) - 1));
                     _hash[hash2Value] = _pos;
-                    temp ^= ((uint) (_bufferBase[cur + 2]) << 8);
-                    uint hash3Value = (temp & (((int) kHash3Size) - 1));
+                    temp ^= ((uint)(_bufferBase[cur + 2]) << 8);
+                    uint hash3Value = (temp & (((int)kHash3Size) - 1));
                     _hash[kHash3Offset + hash3Value] = _pos;
                     hashValue = (temp ^ (CRC.Table[_bufferBase[cur + 3]] << 5)) & _hashMask;
                 }
                 else
-                    hashValue = _bufferBase[cur] ^ ((uint) (_bufferBase[cur + 1]) << 8);
+                    hashValue = _bufferBase[cur] ^ ((uint)(_bufferBase[cur + 1]) << 8);
 
                 uint curMatch = _hash[kFixHashSize + hashValue];
                 _hash[kFixHashSize + hashValue] = _pos;
@@ -335,7 +335,7 @@ namespace SevenZip.Sdk.Compression.LZ
             } while (--num != 0);
         }
 
-        #endregion
+        #endregion IMatchFinder Members
 
         public void SetType(int numHashBytes)
         {
@@ -379,9 +379,9 @@ namespace SevenZip.Sdk.Compression.LZ
         private void Normalize()
         {
             uint subValue = _pos - _cyclicBufferSize;
-            NormalizeLinks(_son, _cyclicBufferSize*2, subValue);
+            NormalizeLinks(_son, _cyclicBufferSize * 2, subValue);
             NormalizeLinks(_hash, _hashSizeSum, subValue);
-            ReduceOffsets((int) subValue);
+            ReduceOffsets((int)subValue);
         }
 
         //public void SetCutValue(UInt32 cutValue) { _cutValue = cutValue; }

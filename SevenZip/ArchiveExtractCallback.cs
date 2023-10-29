@@ -6,6 +6,7 @@ namespace SevenZip
     using System.IO;
 
 #if UNMANAGED
+
     /// <summary>
     /// Archive extraction callback to handle the process of unpacking files
     /// </summary>
@@ -128,7 +129,8 @@ namespace SevenZip
             _extractor = extractor;
             GC.AddMemoryPressure(MemoryPressure);
         }
-        #endregion
+
+        #endregion Constructors
 
         /// <summary>
         /// Occurs when a new file is going to be unpacked
@@ -192,7 +194,8 @@ namespace SevenZip
             Open?.Invoke(this, new OpenEventArgs(total));
         }
 
-        public void SetCompleted(ref ulong completeValue) { }
+        public void SetCompleted(ref ulong completeValue)
+        { }
 
         /// <summary>
         /// Sets output stream for writing unpacked data
@@ -249,12 +252,12 @@ namespace SevenZip
                             }
                         }
 
-                        #endregion
+                        #endregion Get entryName
 
                         try
                         {
                             fileName = Path.Combine(RemoveIllegalCharacters(_directory, true), RemoveIllegalCharacters(_directoryStructure ? entryName : Path.GetFileName(entryName)));
-                            
+
                             if (string.IsNullOrEmpty(fileName))
                             {
                                 throw new SevenZipArchiveException("Some archive name is null or empty.");
@@ -274,13 +277,13 @@ namespace SevenZip
                         {
                             _archive.GetProperty(index, ItemPropId.LastWriteTime, ref data);
                             var time = NativeMethods.SafeCast(data, DateTime.MinValue);
-                            
+
                             if (File.Exists(fileName))
                             {
                                 var fnea = new FileOverwriteEventArgs(fileName);
 
                                 FileExists?.Invoke(this, fnea);
-                                
+
                                 if (fnea.Cancel)
                                 {
                                     Canceled = true;
@@ -298,10 +301,10 @@ namespace SevenZip
                             }
 
                             _doneRate += 1.0f / _filesCount;
-                            var iea = new FileInfoEventArgs(_extractor.ArchiveFileData[(int) index], PercentDoneEventArgs.ProducePercentDone(_doneRate));
+                            var iea = new FileInfoEventArgs(_extractor.ArchiveFileData[(int)index], PercentDoneEventArgs.ProducePercentDone(_doneRate));
 
                             FileExtractionStarted?.Invoke(this, iea);
-                            
+
                             if (iea.Cancel)
                             {
                                 Canceled = true;
@@ -332,14 +335,14 @@ namespace SevenZip
                             }
 
                             _fileStream.BytesWritten += IntEventArgsHandler;
-                            outStream =  _fileStream;
+                            outStream = _fileStream;
                         }
                         else
                         {
                             _doneRate += 1.0f / _filesCount;
                             var iea = new FileInfoEventArgs(_extractor.ArchiveFileData[(int)index], PercentDoneEventArgs.ProducePercentDone(_doneRate));
                             FileExtractionStarted?.Invoke(this, iea);
-                            
+
                             if (iea.Cancel)
                             {
                                 Canceled = true;
@@ -378,7 +381,7 @@ namespace SevenZip
 
                     if (index == _fileIndex)
                     {
-                        outStream  = _fileStream;
+                        outStream = _fileStream;
                         _fileIndex = null;
                     }
                     else
@@ -392,7 +395,8 @@ namespace SevenZip
         }
 
         /// <inheritdoc />
-        public void PrepareOperation(AskMode askExtractMode) { }
+        public void PrepareOperation(AskMode askExtractMode)
+        { }
 
         /// <inheritdoc />
         public void SetOperationResult(OperationResult operationResult)
@@ -404,30 +408,39 @@ namespace SevenZip
                     case OperationResult.CrcError:
                         AddException(new ExtractionFailedException("File is corrupted. Crc check has failed."));
                         break;
+
                     case OperationResult.DataError:
                         AddException(new ExtractionFailedException("File is corrupted. Data error has occured."));
                         break;
+
                     case OperationResult.UnsupportedMethod:
                         AddException(new ExtractionFailedException("Unsupported method error has occured."));
                         break;
+
                     case OperationResult.Unavailable:
                         AddException(new ExtractionFailedException("File is unavailable."));
                         break;
+
                     case OperationResult.UnexpectedEnd:
                         AddException(new ExtractionFailedException("Unexpected end of file."));
                         break;
-                    case OperationResult.DataAfterEnd: 
+
+                    case OperationResult.DataAfterEnd:
                         AddException(new ExtractionFailedException("Data after end of archive."));
                         break;
+
                     case OperationResult.IsNotArc:
                         AddException(new ExtractionFailedException("File is not archive."));
                         break;
+
                     case OperationResult.HeadersError:
                         AddException(new ExtractionFailedException("Archive headers error."));
                         break;
+
                     case OperationResult.WrongPassword:
                         AddException(new ExtractionFailedException("Wrong password."));
                         break;
+
                     default:
                         AddException(new ExtractionFailedException($"Unexpected operation result: {operationResult}"));
                         break;
@@ -448,7 +461,7 @@ namespace SevenZip
 
                 var iea = new FileInfoEventArgs(_extractor.ArchiveFileData[_currentIndex], PercentDoneEventArgs.ProducePercentDone(_doneRate));
                 FileExtractionFinished?.Invoke(this, iea);
-                
+
                 if (iea.Cancel)
                 {
                     Canceled = true;
@@ -456,7 +469,7 @@ namespace SevenZip
             }
         }
 
-        #endregion
+        #endregion IArchiveExtractCallback Members
 
         /// <inheritdoc />
         public int CryptoGetTextPassword(out string password)
@@ -544,5 +557,6 @@ namespace SevenZip
             return string.Join(new string(Path.DirectorySeparatorChar, 1), splitFileName.ToArray());
         }
     }
+
 #endif
 }

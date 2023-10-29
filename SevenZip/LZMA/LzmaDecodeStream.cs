@@ -1,9 +1,9 @@
 ﻿namespace SevenZip
 {
+    using SevenZip.Sdk.Compression.Lzma;
+
     using System;
     using System.IO;
-
-    using SevenZip.Sdk.Compression.Lzma;
 
     /// <summary>
     /// The stream which decompresses data with LZMA on the fly.
@@ -33,7 +33,7 @@
         /// <summary>
         /// Gets the chunk size.
         /// </summary>
-        public int ChunkSize => (int) _buffer.Length;
+        public int ChunkSize => (int)_buffer.Length;
 
         /// <summary>
         /// Gets a value indicating whether the current stream supports reading.
@@ -108,9 +108,9 @@
                 _error = true;
                 return;
             }
-            if (_buffer.Capacity < (int) size)
+            if (_buffer.Capacity < (int)size)
             {
-                _buffer.Capacity = (int) size;
+                _buffer.Capacity = (int)size;
             }
             _buffer.SetLength(size);
             _decoder.SetDecoderProperties(properties);
@@ -123,7 +123,8 @@
         /// <summary>
         /// Does nothing.
         /// </summary>
-        public override void Flush() {}
+        public override void Flush()
+        { }
 
         /// <summary>
         /// Reads a sequence of bytes from the current stream and decompresses data if necessary.
@@ -131,7 +132,7 @@
         /// <param name="buffer">An array of bytes.</param>
         /// <param name="offset">The zero-based byte offset in buffer at which to begin storing the data read from the current stream.</param>
         /// <param name="count">The maximum number of bytes to be read from the current stream.</param>
-        /// <returns>The total number of bytes read into the buffer.</returns>        
+        /// <returns>The total number of bytes read into the buffer.</returns>
         public override int Read(byte[] buffer, int offset, int count)
         {
             if (_error)
@@ -168,7 +169,7 @@
         /// </summary>
         /// <param name="offset">A byte offset relative to the origin parameter.</param>
         /// <param name="origin">A value of type System.IO.SeekOrigin indicating the reference point used to obtain the new position.</param>
-        /// <returns>The new position within the current stream.</returns>       
+        /// <returns>The new position within the current stream.</returns>
         public override long Seek(long offset, SeekOrigin origin)
         {
             throw new NotSupportedException();

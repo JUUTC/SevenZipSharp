@@ -6,7 +6,6 @@ namespace SevenZip
     using System.IO;
     using System.Linq;
     using System.Runtime.InteropServices;
-#if NET472 || NETSTANDARD2_0
     using System.Security.Permissions;
     using SevenZip.EventArguments;
     using SevenZip.Sdk;

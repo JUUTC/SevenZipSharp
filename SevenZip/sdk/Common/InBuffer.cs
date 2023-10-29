@@ -47,9 +47,9 @@ namespace SevenZip.Sdk.Buffer
             if (m_StreamWasExhausted)
                 return false;
             m_ProcessedSize += m_Pos;
-            int aNumProcessedBytes = m_Stream.Read(m_Buffer, 0, (int) m_BufferSize);
+            int aNumProcessedBytes = m_Stream.Read(m_Buffer, 0, (int)m_BufferSize);
             m_Pos = 0;
-            m_Limit = (uint) aNumProcessedBytes;
+            m_Limit = (uint)aNumProcessedBytes;
             m_StreamWasExhausted = (aNumProcessedBytes == 0);
             return (!m_StreamWasExhausted);
         }
@@ -59,7 +59,7 @@ namespace SevenZip.Sdk.Buffer
         /// </summary>
         private void ReleaseStream()
         {
-            // m_Stream.Close(); 
+            // m_Stream.Close();
             m_Stream = null;
         }
 

@@ -1,8 +1,8 @@
 ﻿namespace SevenZip
 {
-    using System;
-
     using SevenZip.Sdk;
+
+    using System;
 
     /// <summary>
     /// Callback to implement the ICodeProgress interface
@@ -50,7 +50,7 @@
             }
         }
 
-        #endregion
+        #endregion ICodeProgress Members
 
         public event EventHandler<ProgressEventArgs> Working;
     }
