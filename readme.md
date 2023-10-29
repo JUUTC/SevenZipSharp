@@ -8,6 +8,7 @@ This is a fork from [tomap's fork](https://github.com/tomap/SevenZipSharp) of th
 
 ## Changes from original project
 As required by the GNU GPL 3.0 license, here's a rough list of what has changed since the original CodePlex project, including changes made in tomap's fork.
+* Use 7z 23.0.1
 * Changed Streaminfo index from int to long to support zipping more than ~2.4 million files
 * CodeMaid clean
 * Target .NET version changed from .NET Standard 2.0, .NET Framework 4.7.2 and .NET Core 3.1. to .NET 7.0

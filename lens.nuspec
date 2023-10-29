@@ -2,7 +2,7 @@
 <package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
 		<id>LENS-E.SevenZipSharp</id>
-		<version>1.5.0</version>
+		<version>1.6.1</version>
 		<authors>LENS-E</authors>
 		<summary>Managed 7-zip library written in C# .NET 7 that provides data (self-)extraction and compression (all 7-zip formats are supported).</summary>
 		<description>Wraps 7z.dll or any compatible one and makes use of LZMA SDK.</description>
