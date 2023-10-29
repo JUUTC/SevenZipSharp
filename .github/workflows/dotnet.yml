@@ -9,7 +9,7 @@ on:
       - dev
 env:
   BuildConfig: Release
-  SolutionFile: SevenZipSharp.sln
+  SolutionFile: SevenZip.sln
   
 jobs:
   build:
