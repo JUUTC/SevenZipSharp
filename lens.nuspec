@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+		<id>LENS-E.SevenZipSharp</id>
+		<version>1.4.0</version>
+		<authors>LENS-E</authors>
+		<summary>Managed 7-zip library written in C# (.NET 4.5 and .NET core) that provides data (self-)extraction and compression (all 7-zip formats are supported).</summary>
+		<description>Wraps 7z.dll or any compatible one and makes use of LZMA SDK.</description>
+		<language>en-US</language>
+		<license type="expression">LGPL-3.0-only</license>
+		<projectUrl>https://github.com/joelodell/SevenZipSharp</projectUrl>
+		<tags>7z sevenzip sevenzipsharp 7-zip</tags>
+		<releaseNotes>
+			Added multi volume streaming support
+		</releaseNotes>
+		<dependencies>
+			<group targetFramework="net45" />
+			<group targetFramework="netcoreapp3.1">
+				<dependency id="System.Configuration.ConfigurationManager" version="6.0.0-preview.1.21102.12" />
+				<dependency id="System.Security.Permissions" version="6.0.0-preview.7.21377.19" />
+			</group>
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="Stage\Release\netcoreapp3.1\SevenZipSharp.dll" target="lib\netcoreapp3.1" />
+		<file src="Stage\Release\net461\SevenZipSharp.dll" target="lib\net461" />
+		<file src="license" />
+	</files>
+</package>

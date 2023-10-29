@@ -8,8 +8,7 @@ namespace SevenZip
     using System.Runtime.InteropServices;
 #if NET472 || NETSTANDARD2_0
     using System.Security.Permissions;
-#endif
-
+    using SevenZip.EventArguments;
     using SevenZip.Sdk;
     using SevenZip.Sdk.Compression.Lzma;
 
@@ -27,7 +26,8 @@ namespace SevenZip
     {
 #if UNMANAGED
 
-#region Fields
+        
+        #region Fields
 
         private bool _compressingFilesOnDisk;
 
@@ -103,7 +103,12 @@ namespace SevenZip
         /// </summary>
         public bool FastCompression { get; set; }
 
-#endregion
+        /// <summary>
+        /// An object containing context from the process initiating zipping which will be passed to CreatingNewVolume and ProvideNextSourceStream events.
+        /// </summary>
+        public Object SourceRequest { get; set; }
+
+        #endregion
 
 #endif
         private static volatile int _lzmaDictionarySize = 1 << 22;
@@ -836,6 +841,21 @@ namespace SevenZip
         /// <summary>
         /// Produces  a new instance of ArchiveUpdateCallback class.
         /// </summary>
+        /// <param name="streamInfos">The array of metadata for each file.</param>
+        /// <param name="password">The archive password.</param>
+        /// <returns></returns>
+        private ArchiveUpdateCallback GetArchiveUpdateCallback(StreamInfo[] streamInfos, string password)
+        {
+            SetCompressionProperties();
+            var auc = new ArchiveUpdateCallback(streamInfos, password, this, GetUpdateData(), DirectoryStructure) { DictionarySize = GetDictionarySize() };
+            CommonUpdateCallbackInit(auc);
+
+            return auc;
+        }
+
+        /// <summary>
+        /// Produces  a new instance of ArchiveUpdateCallback class.
+        /// </summary>
         /// <param name="streamDict">Dictionary&lt;name of the archive entry, stream&gt;.</param>
         /// <param name="password">The archive password</param>
         /// <returns></returns>
@@ -936,6 +956,41 @@ namespace SevenZip
             return new OutMultiStreamWrapper(_archiveName, _volumeSize);
         }
 
+        private ISequentialOutStream GetOutStream()
+        {
+            ISequentialOutStream sequentialOutStream;
+
+            if (CreatingNewVolume != null)
+            {
+                if (_volumeSize > 0)
+                {
+                    Stream outFileStream = CreatingNewVolume.Invoke(this, new NewVolumeEventArgs(1, this._archiveName + ".001", this.SourceRequest));
+                    var multiWrapper = new OutMultiStreamWrapper(_archiveName, _volumeSize, outFileStream);
+                    multiWrapper.CreatingNewVolume += OutMultiStreamWrapper_CreatingNewVolume;
+                    sequentialOutStream = multiWrapper;
+                }
+                else
+                {
+                    Stream outFileStream = CreatingNewVolume.Invoke(this, new NewVolumeEventArgs(1, this._archiveName, this.SourceRequest));
+                    sequentialOutStream = new OutStreamWrapper(outFileStream, true);
+                }
+                
+            }
+            else
+            {
+                throw new ArgumentException("CreatingNewVolume was null. Caller must subscribe to CreatingNewVolume and provide source stream.");
+            }
+
+            
+            return sequentialOutStream;
+        }
+
+        private Stream OutMultiStreamWrapper_CreatingNewVolume(object sender, NewVolumeEventArgs e)
+        {
+            e.SourceRequest = SourceRequest;
+            return CreatingNewVolume.Invoke(sender, e);
+        }
+
         private IInStream GetInStream()
         {
             return File.Exists(_archiveName) &&
@@ -988,7 +1043,34 @@ namespace SevenZip
         /// </summary>
         public event EventHandler<EventArgs> CompressionFinished;
 
-#region Event proxies
+        /// <summary>
+        /// Occurs when a new volume needs to be created. Gives the caller the ability to pass in a stream for the new volume.
+        /// </summary>
+        public event CreatingNewVolumeHandler CreatingNewVolume;
+
+        /// <summary>
+        /// Delegate for new volume creation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        public delegate Stream CreatingNewVolumeHandler(object sender, NewVolumeEventArgs e);
+
+
+        /// <summary>
+        /// Occurs when a new source stream needs to be provided. Gives the caller the ability to pass the next source stream.
+        /// </summary>
+        public event NewSourceStreamHandler ProvideNextSourceStream;
+
+        /// <summary>
+        /// Delegate for new source stream.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        public delegate Stream NewSourceStreamHandler(object sender, NewSourceStreamEventArgs e);
+
+        #region Event proxies
 
         /// <summary>
         /// Event proxy for FileCompressionStarted.
@@ -1017,6 +1099,7 @@ namespace SevenZip
         /// <param name="e">The event arguments.</param>
         private void CompressingEventProxy(object sender, ProgressEventArgs e)
         {
+            e.SourceRequest = SourceRequest;
             OnEvent(Compressing, e, false);
         }
 
@@ -1636,7 +1719,84 @@ namespace SevenZip
             ThrowUserException();
         }
 
-#endregion
+        /// <summary>
+        /// Compresses the specified list of streaminfos. The compressor will trigger the event ProvideNextSourceStream each time it is ready to read the next file. 
+        /// The caller will provide a readable stream for the requested file.
+        /// Multiple volumes will be created if needed. When a new volume is needed the event CreatingNewVolume will be triggered and the caller will be required to provide a writable stream.
+        /// </summary>
+        /// <param name="baseArchiveName">The base name to use for each volume.</param>
+        /// <param name="streamInfos">A list of source files to be compressed. When the compressor needs to read each file ProvideNextSourceStream will be triggered</param>
+        /// <param name="password">The archive password.</param>
+        public void CompressStreamsMultiVolume(string baseArchiveName, StreamInfo[] streamInfos, string password = "")
+        {
+            ClearExceptions();
+
+            _archiveName = baseArchiveName;
+
+            if (CreatingNewVolume == null)
+            {
+                if (!ThrowException(null, new ArgumentException("You must subscribe to CreatingNewVolume.")))
+                {
+                    return;
+                }
+            }
+
+            if (ProvideNextSourceStream == null)
+            {
+                if (!ThrowException(null, new ArgumentException("You must subscribe to ProvideNextSourceStream.")))
+                {
+                    return;
+                }
+            }
+
+            try
+            {
+                SevenZipLibraryManager.LoadLibrary(this, _archiveFormat);
+                ISequentialOutStream sequentialArchiveStream;
+
+                using ((sequentialArchiveStream = GetOutStream()) as IDisposable)
+                {
+
+                    using (var auc = GetArchiveUpdateCallback(streamInfos, password))
+                    {
+                        auc.ProvideNextSourceStream += Auc_ProvideNextSourceStream;
+                        try
+                        {
+                            CheckedExecute(
+                                SevenZipLibraryManager.OutArchive(_archiveFormat, this).UpdateItems(
+                                    sequentialArchiveStream, (uint)streamInfos.Length, auc),
+                                SevenZipCompressionFailedException.DEFAULT_MESSAGE, auc);
+                        }
+                        finally
+                        {
+                            FreeCompressionCallback(auc);
+                        }
+                    }
+                    
+                }
+            }
+            finally
+            {
+                SevenZipLibraryManager.FreeLibrary(this, _archiveFormat);
+                OnEvent(CompressionFinished, EventArgs.Empty, false);
+            }
+
+            ThrowUserException();
+        }
+
+        /// <summary>
+        /// Provide next source stream
+        /// </summary>
+        /// <param name="sender">This instance</param>
+        /// <param name="e">Event args</param>
+        /// <returns></returns>
+        private Stream Auc_ProvideNextSourceStream(object sender, NewSourceStreamEventArgs e)
+        {
+            e.SourceRequest = SourceRequest;
+            Stream inStream = ProvideNextSourceStream.Invoke(this, e);
+            return inStream;
+        }
+        #endregion
 
 #region ModifyArchive overloads
 

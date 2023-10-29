@@ -1,5 +1,6 @@
 namespace SevenZip
 {
+    using SevenZip.EventArguments;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -61,6 +62,8 @@ namespace SevenZip
         /// Input streams to be compressed.
         /// </summary>
         private Stream[] _streams;
+
+        private StreamInfo[] _streamInfos;
 
         private UpdateData _updateData;
         private List<InStreamWrapper> _wrappersToDispose;
@@ -172,6 +175,22 @@ namespace SevenZip
             Init(streamDict, compressor, updateData, directoryStructure);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the ArchiveUpdateCallback class
+        /// </summary>
+        /// <param name="streamDict">Dictionary&lt;file stream, name of the archive entry&gt;</param>
+        /// <param name="password">The archive password</param>
+        /// <param name="compressor">The owner of the callback</param>
+        /// <param name="updateData">The compression parameters.</param>
+        /// <param name="directoryStructure">Preserve directory structure.</param>
+        public ArchiveUpdateCallback(
+            StreamInfo[] streamInfos, string password,
+            SevenZipCompressor compressor, UpdateData updateData, bool directoryStructure)
+            : base(password)
+        {
+            Init(streamInfos, compressor, updateData, directoryStructure);
+        }
+
         private void CommonInit(SevenZipCompressor compressor, UpdateData updateData, bool directoryStructure)
         {
             _compressor = compressor;
@@ -254,6 +273,21 @@ namespace SevenZip
             CommonInit(compressor, updateData, directoryStructure);
         }
 
+        private void Init(
+           StreamInfo[] streamInfos,
+            SevenZipCompressor compressor, UpdateData updateData, bool directoryStructure)
+        {
+            _streamInfos = streamInfos;
+            foreach (var str in _streamInfos)
+            {
+                if (str != null)
+                {
+                    _bytesCount += str.FileSize;
+                }
+            }
+            CommonInit(compressor, updateData, directoryStructure);
+        }
+
         #endregion
 
         /// <summary>
@@ -302,6 +336,19 @@ namespace SevenZip
         /// </summary>
         /// <remarks>Occurs when 7-zip engine requests for an input stream for the next file to pack it</remarks>
         public event EventHandler<FileNameEventArgs> FileCompressionStarted;
+
+        /// <summary>
+        /// Occurs when a new volume needs to be created. Gives the caller the ability to pass in a stream for the new volume.
+        /// </summary>
+        public event NewSourceStreamHandler ProvideNextSourceStream;
+
+        /// <summary>
+        /// Delegate for source stream handler
+        /// </summary>
+        /// <param name="sender">This instance</param>
+        /// <param name="e">Event args</param>
+        /// <returns></returns>
+        public delegate Stream NewSourceStreamHandler(object sender, NewSourceStreamEventArgs e);
 
         /// <summary>
         /// Occurs when data are being compressed.
@@ -410,7 +457,18 @@ namespace SevenZip
 
                         if (_updateData.Mode != InternalCompressionMode.Modify)
                         {
-                            if (_files == null)
+                            if( _streamInfos != null)
+                            {
+                                if (!string.IsNullOrWhiteSpace(_streamInfos[index].RelativeFilePath))
+                                {
+                                    val = _streamInfos[index].RelativeFilePath.Replace('/', '\\');
+                                }
+                                else if (!string.IsNullOrWhiteSpace(_streamInfos[index].FilePath))
+                                {
+                                    val = _streamInfos[index].FilePath.Replace('/', '\\');
+                                }
+                            }
+                            else if (_files == null)
                             {
                                 if (_entries != null)
                                 {
@@ -477,7 +535,11 @@ namespace SevenZip
                         {
                             if (_files == null)
                             {
-                                if (_streams == null)
+                                if (_streamInfos != null)
+                                {
+                                    size = (ulong)_streamInfos[index].FileSize;
+                                }
+                                else if (_streams == null)
                                 {
                                     size = _bytesCount > 0 ? (ulong) _bytesCount : 0;
                                 }
@@ -640,6 +702,13 @@ namespace SevenZip
                 {
                     return -1;
                 }
+            }
+            else if(_streamInfos != null)
+            {
+                Stream s = ProvideNextSourceStream.Invoke(this, new NewSourceStreamEventArgs(index));
+                _fileStream = new InStreamWrapper(s, true);
+                _fileStream.BytesRead += IntEventArgsHandler;
+                inStream = _fileStream;
             }
             else
             {

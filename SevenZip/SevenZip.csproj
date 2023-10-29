@@ -70,11 +70,21 @@
     <EmbeddedResource Include="arch\Test.txt.gz" />
     <EmbeddedResource Include="arch\Test.txt.xz" />
     <EmbeddedResource Include="arch\Test.zip" />
+    <None Include="SevenZip.snk" />
+    <EmbeddedResource Include="sfx\7z.sfx" />
+    <EmbeddedResource Include="sfx\7zCon.sfx" />
+    <EmbeddedResource Include="sfx\7zxSD_All_x64.sfx" />
+    <EmbeddedResource Include="sfx\7zxSD_Deflate_x64.sfx" />
+    <EmbeddedResource Include="sfx\7zxSD_LZMA2.sfx" />
+    <EmbeddedResource Include="sfx\7zxSD_LZMA2_x64.sfx" />
+    <EmbeddedResource Include="sfx\7zxSD_LZMA_x64.sfx" />
+    <EmbeddedResource Include="sfx\7zxSD_PPMd_x64.sfx" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Configuration" Condition="'$(TargetFramework)' == 'net472'">
-      <HintPath>C:\Windows\Microsoft.NET\assembly\GAC_MSIL\System.Configuration\v4.0_4.0.0.0__b03f5f7f11d50a3a\System.Configuration.dll</HintPath>
-    </Reference>
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.0-preview.1.21102.12" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.Security.Permissions" Version="6.0.0-preview.7.21377.19" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="6.0.1" />

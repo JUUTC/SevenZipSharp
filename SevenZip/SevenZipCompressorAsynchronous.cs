@@ -22,7 +22,9 @@
         private delegate void CompressDirectory2Delegate(string directory, Stream archiveStream, string password, string searchPattern, bool recursion);
 
         private delegate void CompressStreamDelegate(Stream inStream, Stream outStream, string password);
-
+        
+        private delegate void CompressStreamMultivolumeDelegate(string archiveName, StreamInfo[] streamInfos, string password);
+        
         private delegate void ModifyArchiveDelegate(string archiveName, IDictionary<int, string> newFileNames, string password);
 
         #endregion
@@ -421,6 +423,23 @@
             }
         }
 
+        }
+
+        /// <summary>
+        /// Compresses the specified list of streaminfos. The compressor will trigger the event ProvideNextSourceStream each time it is ready to read the next file. 
+        /// The caller will provide a readable stream for the requested file.
+        /// Multiple volumes will be created if needed. When a new volume is needed the event CreatingNewVolume will be triggered and the caller will be required to provide a writable stream.
+        /// </summary>
+        /// <param name="baseArchiveName">The base name to use for each volume.</param>
+        /// <param name="streamInfos">A list of source files to be compressed. When the compressor needs to read each file ProvideNextSourceStream will be triggered</param>
+        /// <param name="password">The archive password.</param>
+        public Task CompressStreamsMultiVolumeAsync(string baseArchiveName, StreamInfo[] streamInfos, string password = "")
+        {
+            SaveContext();
+            return Task.Run(() => new CompressStreamMultivolumeDelegate(CompressStreamsMultiVolume).Invoke(baseArchiveName, streamInfos, password))
+                .ContinueWith(_ => ReleaseContext());
+
+        }
         #endregion
 
         #region BeginModifyArchive overloads

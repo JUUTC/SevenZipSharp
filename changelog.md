@@ -1,4 +1,6 @@
 # Changelog
+## 1.0.0 - Branch https://github.com/joelodell/SevenZipSharp (2021-08-XX) 
+- Added CompressStreamsMultiVolumeAsync which requires the caller to subscribe to two new events: CreatingNewVolume and ProvideNextSourceStream. The CreatingNewVolume event fires when a new volume needs to be created. The caller provides a new stream for the new volume. When the compressor is ready to compress a file, ProvideNextSourceStream is fired. The caller provides the source stream for the requested file.
 
 ## 1.5.2 (2023-03-22)
 - Fixed an issue when seeking in streams with SeekOrigin.End, thanks to GitHub user bneidhold.

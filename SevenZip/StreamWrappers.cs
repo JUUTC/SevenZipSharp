@@ -1,5 +1,6 @@
 namespace SevenZip
 {
+    using SevenZip.EventArguments;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -237,6 +238,7 @@ namespace SevenZip
         protected long Position;
         protected long StreamLength;
 
+
         /// <summary>
         /// Initializes a new instance of the MultiStreamWrapper class.
         /// </summary>
@@ -398,6 +400,19 @@ namespace SevenZip
         private long _overallLength;
 
         /// <summary>
+        /// Occurs when a new volume needs to be created. Gives the caller the ability to pass in a writable stream for the new volume.
+        /// </summary>
+        public event CreatingNewVolumeHandler CreatingNewVolume;
+
+        /// <summary>
+        /// Delegate for new volume creation
+        /// </summary>
+        /// <param name="sender">This instance</param>
+        /// <param name="e">Event args</param>
+        /// <returns></returns>
+        public delegate Stream CreatingNewVolumeHandler(object sender, NewVolumeEventArgs e);
+
+        /// <summary>
         /// Initializes a new instance of the OutMultiStreamWrapper class.
         /// </summary>
         /// <param name="archiveName">The archive name.</param>
@@ -409,6 +424,21 @@ namespace SevenZip
             _volumeSize = volumeSize;
             CurrentStream = -1;
             NewVolumeStream();
+        }
+
+
+        /// <summary>
+        /// Initializes a new instance of the OutMultiStreamWrapper class.
+        /// </summary>
+        /// <param name="archiveName">The archive name.</param>
+        /// <param name="volumeSize">The volume size.</param>
+        public OutMultiStreamWrapper(string archiveName, long volumeSize, Stream archiveStream) :
+            base(true)
+        {
+            _archiveName = archiveName;
+            _volumeSize = volumeSize;
+            CurrentStream = -1;
+            NewVolumeStream(archiveStream);
         }
 
         #region IOutStream Members
@@ -455,8 +485,24 @@ namespace SevenZip
 
         private void NewVolumeStream()
         {
+            Stream newVolStream;
+            // if caller subscribes to CreatingNewVolume, than caller is providing a stream for the new volume
+            if (CreatingNewVolume != null && _volumeSize > 0)
+            {
+                string proposedFileName = _archiveName + VolumeNumber(CurrentStream + 2);
+
+                newVolStream = CreatingNewVolume?.Invoke(this, new NewVolumeEventArgs(CurrentStream + 2, proposedFileName, null));
+            }
+            else
+            {
+                newVolStream = File.Create(_archiveName + VolumeNumber(CurrentStream + 2));
+            }
+            NewVolumeStream(newVolStream);
+        }
+        private void NewVolumeStream(Stream s)
+        {
             CurrentStream++;
-            Streams.Add(File.Create(_archiveName + VolumeNumber(CurrentStream + 1)));
+            Streams.Add(s);
             Streams[CurrentStream].SetLength(_volumeSize);
             StreamOffsets.Add(CurrentStream, new KeyValuePair<long, long>(0, _volumeSize - 1));
         }
