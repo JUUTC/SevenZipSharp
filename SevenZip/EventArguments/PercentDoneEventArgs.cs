@@ -11,7 +11,7 @@
         /// Initializes a new instance of the PercentDoneEventArgs class.
         /// </summary>
         /// <param name="percentDone">The percent of finished work.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException"/>
+        /// <exception cref="ArgumentOutOfRangeException"/>
         public PercentDoneEventArgs(byte percentDone)
         {
             if (percentDone > 100 || percentDone < 0)
@@ -33,7 +33,7 @@
         /// </summary>
         /// <param name="doneRate">The rate of the done work.</param>
         /// <returns>Percent integer equivalent.</returns>
-        /// <exception cref="System.ArgumentException"/>
+        /// <exception cref="ArgumentException"/>
         internal static byte ProducePercentDone(float doneRate)
         {
             return (byte)Math.Round(Math.Min(100 * doneRate, 100), MidpointRounding.AwayFromZero);

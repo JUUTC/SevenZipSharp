@@ -1,5 +1,6 @@
-﻿namespace SevenZip
+﻿namespace SevenZip.LZMA
 {
+    using SevenZip.EventArguments;
     using SevenZip.Sdk;
 
     using System;

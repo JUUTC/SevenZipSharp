@@ -32,10 +32,10 @@
             }
         }
 
-
 #if SFX
+
         [Test]
-        public void CreateSfxArchiveTest([Values]SfxModule sfxModule)
+        public void CreateSfxArchiveTest([Values] SfxModule sfxModule)
         {
             if (sfxModule.HasFlag(SfxModule.Custom))
             {
@@ -44,7 +44,7 @@
 
             var sfxFile = Path.Combine(OutputDirectory, "sfx.exe");
             var sfx = new SevenZipSfx(sfxModule);
-            var compressor = new SevenZipCompressor {DirectoryStructure = false};
+            var compressor = new SevenZipCompressor { DirectoryStructure = false };
 
             compressor.CompressFiles(TemporaryFile, @"TestData\zip.zip");
 
@@ -71,6 +71,7 @@
                 process?.Kill();
             });
         }
+
 #endif
 
         [Test]
@@ -100,7 +101,6 @@
                 var decoder = new LzmaDecodeStream(input);
                 using (var output = new FileStream(newZip, FileMode.Create))
                 {
-
                     int bufSize = 24576, count;
                     var buf = new byte[bufSize];
 
@@ -115,7 +115,6 @@
 
             using (var extractor = new SevenZipExtractor(newZip))
             {
-
                 Assert.AreEqual(1, extractor.FilesCount);
                 Assert.AreEqual("zip.txt", extractor.ArchiveFileNames[0]);
             }

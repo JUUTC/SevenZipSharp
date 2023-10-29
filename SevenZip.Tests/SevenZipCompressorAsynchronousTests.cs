@@ -4,6 +4,7 @@
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
+
     using NUnit.Framework;
 
     [TestFixture]
@@ -56,7 +57,7 @@
         {
             var compressionFinishedInvoked = false;
 
-            var compressor = new SevenZipCompressor {DirectoryStructure = false};
+            var compressor = new SevenZipCompressor { DirectoryStructure = false };
             compressor.CompressionFinished += (o, e) => compressionFinishedInvoked = true;
 
             compressor.BeginCompressFiles(TemporaryFile, @"TestData\zip.zip", @"TestData\tar.tar");
@@ -129,7 +130,7 @@
             var compressionFinishedInvoked = false;
             compressor.CompressionFinished += (o, e) => compressionFinishedInvoked = true;
 
-            compressor.BeginModifyArchive(TemporaryFile, new Dictionary<int, string>{{0, @"tartar"}});
+            compressor.BeginModifyArchive(TemporaryFile, new Dictionary<int, string> { { 0, @"tartar" } });
 
             var timeToWait = 1000;
             while (!compressionFinishedInvoked)

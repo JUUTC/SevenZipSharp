@@ -7,13 +7,13 @@ namespace SevenZip
     /// </summary>
     public sealed class ProgressEventArgs : PercentDoneEventArgs
     {
-        private Object _sourceRequest;
+        private object _sourceRequest;
 
         /// <summary>
         /// Gets or sets the source request.
         /// </summary>
         /// <value>The source request.</value>
-        public Object SourceRequest
+        public object SourceRequest
         {
             get
             {

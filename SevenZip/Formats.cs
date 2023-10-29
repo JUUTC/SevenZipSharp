@@ -5,6 +5,7 @@
     using System.IO;
 
 #if UNMANAGED
+
     /// <summary>
     /// Readable archive format enumeration.
     /// </summary>
@@ -12,231 +13,278 @@
     {
         /// <summary>
         /// Open 7-zip archive format.
-        /// </summary>  
-        /// <remarks><a href="http://en.wikipedia.org/wiki/7-zip">Wikipedia information</a></remarks> 
+        /// </summary>
+        /// <remarks><a href="http://en.wikipedia.org/wiki/7-zip">Wikipedia information</a></remarks>
         SevenZip,
+
         /// <summary>
         /// Proprietary Arj archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/ARJ">Wikipedia information</a></remarks>
         Arj,
+
         /// <summary>
         /// Open Bzip2 archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Bzip2">Wikipedia information</a></remarks>
         BZip2,
+
         /// <summary>
         /// Microsoft cabinet archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Cabinet_(file_format)">Wikipedia information</a></remarks>
         Cab,
+
         /// <summary>
         /// Microsoft Compiled HTML Help file format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Microsoft_Compiled_HTML_Help">Wikipedia information</a></remarks>
         Chm,
+
         /// <summary>
         /// Microsoft Compound file format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Compound_File_Binary_Format">Wikipedia information</a></remarks>
         Compound,
+
         /// <summary>
         /// Open Cpio archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Cpio">Wikipedia information</a></remarks>
         Cpio,
+
         /// <summary>
         /// Open Debian software package format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Deb_(file_format)">Wikipedia information</a></remarks>
         Deb,
+
         /// <summary>
         /// Open Gzip archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Gzip">Wikipedia information</a></remarks>
         GZip,
+
         /// <summary>
         /// Open ISO disk image format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/ISO_image">Wikipedia information</a></remarks>
         Iso,
+
         /// <summary>
         /// Open Lzh archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Lzh">Wikipedia information</a></remarks>
         Lzh,
+
         /// <summary>
         /// Open core 7-zip Lzma raw archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Lzma">Wikipedia information</a></remarks>
         Lzma,
+
         /// <summary>
         /// Nullsoft installation package format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/NSIS">Wikipedia information</a></remarks>
         Nsis,
+
         /// <summary>
         /// GUID Partition Table.
         /// </summary>
         /// <remarks><a href="https://en.wikipedia.org/wiki/GUID_Partition_Table">Wikipedia information</a></remarks>
         Gpt,
+
         /// <summary>
         /// RarLab Rar archive format, version 5.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Rar">Wikipedia information</a></remarks>
         Rar,
+
         /// <summary>
         /// RarLab Rar archive format, version 4 or older.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Rar">Wikipedia information</a></remarks>
         Rar4,
+
         /// <summary>
         /// Open Rpm software package format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/RPM_Package_Manager">Wikipedia information</a></remarks>
         Rpm,
+
         /// <summary>
         /// Open split file format.
         /// </summary>
         /// <remarks><a href="?">Wikipedia information</a></remarks>
         Split,
+
         /// <summary>
         /// Open Tar archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Tar_(file_format)">Wikipedia information</a></remarks>
         Tar,
+
         /// <summary>
         /// Microsoft Windows Imaging disk image format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Windows_Imaging_Format">Wikipedia information</a></remarks>
         Wim,
+
         /// <summary>
         /// Open LZW archive format; implemented in "compress" program; also known as "Z" archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Compress">Wikipedia information</a></remarks>
         Lzw,
+
         /// <summary>
         /// Open Zip archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/ZIP_(file_format)">Wikipedia information</a></remarks>
         Zip,
+
         /// <summary>
         /// Open Udf disk image format.
         /// </summary>
         Udf,
+
         /// <summary>
         /// Xar open source archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Xar_(archiver)">Wikipedia information</a></remarks>
         Xar,
+
         /// <summary>
         /// Mub
         /// </summary>
         Mub,
+
         /// <summary>
         /// Macintosh Disk Image on CD.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/HFS_Plus">Wikipedia information</a></remarks>
         Hfs,
+
         /// <summary>
         /// Apple Mac OS X Disk Copy Disk Image format.
         /// </summary>
         Dmg,
+
         /// <summary>
         /// Open Xz archive format.
         /// </summary>
-        /// <remarks><a href="http://en.wikipedia.org/wiki/Xz">Wikipedia information</a></remarks>        
+        /// <remarks><a href="http://en.wikipedia.org/wiki/Xz">Wikipedia information</a></remarks>
         XZ,
+
         /// <summary>
         /// MSLZ archive format.
         /// </summary>
         Mslz,
+
         /// <summary>
         /// Flash video format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Flv">Wikipedia information</a></remarks>
         Flv,
+
         /// <summary>
         /// Shockwave Flash format.
         /// </summary>
-        /// <remarks><a href="http://en.wikipedia.org/wiki/Swf">Wikipedia information</a></remarks>         
+        /// <remarks><a href="http://en.wikipedia.org/wiki/Swf">Wikipedia information</a></remarks>
         Swf,
+
         /// <summary>
         /// Windows PE executable format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Portable_Executable">Wikipedia information</a></remarks>
         PE,
+
         /// <summary>
         /// Linux executable Elf format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Executable_and_Linkable_Format">Wikipedia information</a></remarks>
         Elf,
+
         /// <summary>
         /// Windows Installer Database.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Windows_Installer">Wikipedia information</a></remarks>
         Msi,
+
         /// <summary>
         /// Microsoft virtual hard disk file format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/VHD_%28file_format%29">Wikipedia information</a></remarks>
         Vhd,
+
         /// <summary>
         /// SquashFS file system format.
         /// </summary>
         /// <remarks><a href="https://en.wikipedia.org/wiki/SquashFS">Wikipedia information</a></remarks>
         SquashFS,
+
         /// <summary>
         /// Lzma86 file format.
         /// </summary>
         Lzma86,
+
         /// <summary>
         /// Prediction by Partial Matching by Dmitry algorithm.
         /// </summary>
         /// <remarks><a href="https://en.wikipedia.org/wiki/Prediction_by_partial_matching">Wikipedia information</a></remarks>
         Ppmd,
+
         /// <summary>
         /// TE format.
         /// </summary>
         TE,
+
         /// <summary>
         /// UEFIc format.
         /// </summary>
         /// <remarks><a href="https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface">Wikipedia information</a></remarks>
         UEFIc,
+
         /// <summary>
         /// UEFIs format.
         /// </summary>
         /// <remarks><a href="https://en.wikipedia.org/wiki/Unified_Extensible_Firmware_Interface">Wikipedia information</a></remarks>
         UEFIs,
+
         /// <summary>
         /// Compressed ROM file system format.
         /// </summary>
         /// <remarks><a href="https://en.wikipedia.org/wiki/Cramfs">Wikipedia information</a></remarks>
         CramFS,
+
         /// <summary>
         /// APM format.
         /// </summary>
         APM,
+
         /// <summary>
         /// Swfc format.
         /// </summary>
         Swfc,
+
         /// <summary>
         /// NTFS file system format.
         /// </summary>
         /// <remarks><a href="https://en.wikipedia.org/wiki/NTFS">Wikipedia information</a></remarks>
         Ntfs,
+
         /// <summary>
         /// FAT file system format.
         /// </summary>
         /// <remarks><a href="https://en.wikipedia.org/wiki/File_Allocation_Table">Wikipedia information</a></remarks>
         Fat,
+
         /// <summary>
         /// MBR format.
         /// </summary>
         /// <remarks><a href="https://en.wikipedia.org/wiki/Master_boot_record">Wikipedia information</a></remarks>
         Mbr,
+
         /// <summary>
         /// Mach-O file format.
         /// </summary>
@@ -246,7 +294,7 @@
 
     /// <summary>
     /// Writable archive format enumeration.
-    /// </summary>    
+    /// </summary>
     public enum OutArchiveFormat
     {
         /// <summary>
@@ -254,30 +302,35 @@
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/7-zip">Wikipedia information</a></remarks>
         SevenZip,
+
         /// <summary>
         /// Open Zip archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/ZIP_(file_format)">Wikipedia information</a></remarks>
         Zip,
+
         /// <summary>
         /// Open Gzip archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Gzip">Wikipedia information</a></remarks>
         GZip,
-        /// <summary>       
+
+        /// <summary>
         /// Open Bzip2 archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Bzip2">Wikipedia information</a></remarks>
         BZip2,
+
         /// <summary>
         /// Open Tar archive format.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Tar_(file_format)">Wikipedia information</a></remarks>
         Tar,
+
         /// <summary>
         /// Open Xz archive format.
         /// </summary>
-        /// <remarks><a href="http://en.wikipedia.org/wiki/Xz">Wikipedia information</a></remarks>        
+        /// <remarks><a href="http://en.wikipedia.org/wiki/Xz">Wikipedia information</a></remarks>
         XZ
     }
 
@@ -290,22 +343,27 @@
         /// No compression
         /// </summary>
         None,
+
         /// <summary>
         /// Very low compression level
         /// </summary>
         Fast,
+
         /// <summary>
         /// Low compression level
         /// </summary>
         Low,
+
         /// <summary>
         /// Normal compression level (default)
         /// </summary>
         Normal,
+
         /// <summary>
         /// High compression level
         /// </summary>
         High,
+
         /// <summary>
         /// The best compression level (slow)
         /// </summary>
@@ -322,32 +380,39 @@
         /// Zip or 7-zip|no compression method.
         /// </summary>
         Copy,
+
         /// <summary>
         /// Zip|Deflate method.
         /// </summary>
         Deflate,
+
         /// <summary>
         /// Zip|Deflate64 method.
         /// </summary>
         Deflate64,
+
         /// <summary>
         /// Zip or 7-zip|Bzip2 method.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Cabinet_(file_format)">Wikipedia information</a></remarks>
         BZip2,
+
         /// <summary>
         /// Zip or 7-zip|LZMA method based on Lempel-Ziv algorithm, it is default for 7-zip.
         /// </summary>
         Lzma,
+
         /// <summary>
         /// 7-zip|LZMA version 2, LZMA with improved multithreading and usually slight archive size decrease.
         /// </summary>
         Lzma2,
+
         /// <summary>
         /// Zip or 7-zip|PPMd method based on Dmitry Shkarin's PPMdH source code, very efficient for compressing texts.
         /// </summary>
         /// <remarks><a href="http://en.wikipedia.org/wiki/Prediction_by_Partial_Matching">Wikipedia information</a></remarks>
         Ppmd,
+
         /// <summary>
         /// No method change.
         /// </summary>
@@ -376,6 +441,7 @@
         /// </summary>
         internal static readonly Dictionary<InArchiveFormat, Guid> InFormatGuids =
             new Dictionary<InArchiveFormat, Guid>
+
             #region InFormatGuids initialization
 
             {
@@ -428,13 +494,14 @@
                 {InArchiveFormat.MachO,     new Guid("23170f69-40c1-278a-1000-000110DF0000")}
             };
 
-        #endregion
+        #endregion InFormatGuids initialization
 
         /// <summary>
         /// List of writable archive format interface guids for 7-zip COM interop.
         /// </summary>
         internal static readonly Dictionary<OutArchiveFormat, Guid> OutFormatGuids =
             new Dictionary<OutArchiveFormat, Guid>
+
             #region OutFormatGuids initialization
 
             {
@@ -446,10 +513,11 @@
                 {OutArchiveFormat.XZ,           new Guid("23170f69-40c1-278a-1000-0001100C0000")},
             };
 
-        #endregion
+        #endregion OutFormatGuids initialization
 
         internal static readonly Dictionary<CompressionMethod, string> MethodNames =
             new Dictionary<CompressionMethod, string>
+
             #region MethodNames initialization
 
             {
@@ -462,10 +530,11 @@
                 {CompressionMethod.BZip2, "BZip2"}
             };
 
-        #endregion
+        #endregion MethodNames initialization
 
         internal static readonly Dictionary<OutArchiveFormat, InArchiveFormat> InForOutFormats =
             new Dictionary<OutArchiveFormat, InArchiveFormat>
+
             #region InForOutFormats initialization
 
             {
@@ -477,13 +546,14 @@
                 {OutArchiveFormat.Zip, InArchiveFormat.Zip}
             };
 
-        #endregion
+        #endregion InForOutFormats initialization
 
         /// <summary>
         /// List of archive formats corresponding to specific extensions
         /// </summary>
         private static readonly Dictionary<string, InArchiveFormat> InExtensionFormats =
             new Dictionary<string, InArchiveFormat>
+
             #region InExtensionFormats initialization
 
             {{"7z",     InArchiveFormat.SevenZip},
@@ -517,7 +587,7 @@
              {"ntfs",   InArchiveFormat.Ntfs }
         };
 
-        #endregion
+        #endregion InExtensionFormats initialization
 
         /// <summary>
         /// List of archive formats corresponding to specific signatures
@@ -525,6 +595,7 @@
         /// <remarks>Based on the information at <a href="http://www.garykessler.net/library/file_sigs.html">this site.</a></remarks>
         internal static readonly Dictionary<string, InArchiveFormat> InSignatureFormats =
             new Dictionary<string, InArchiveFormat>
+
             #region InSignatureFormats initialization
 
             {{"37-7A-BC-AF-27-1C",                                              InArchiveFormat.SevenZip},
@@ -561,7 +632,8 @@
             {"78",                                                              InArchiveFormat.Dmg},
             {"63-6F-6E-65-63-74-69-78",                                         InArchiveFormat.Vhd},
             {"45-46-49-20-50-41-52-54-00-00-01-00",                             InArchiveFormat.Gpt}};
-        #endregion
+
+        #endregion InSignatureFormats initialization
 
         internal static Dictionary<InArchiveFormat, string> InSignatureFormatsReversed;
 
@@ -598,5 +670,6 @@
             return InExtensionFormats[extension];
         }
     }
+
 #endif
 }

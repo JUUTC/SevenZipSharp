@@ -1,6 +1,7 @@
 ﻿namespace SevenZip
 {
 #if SFX
+
     using System;
     using System.Collections.Generic;
     using System.Globalization;
@@ -21,18 +22,22 @@
         /// Default module (leave this if unsure)
         /// </summary>
         Default,
+
         /// <summary>
         /// The simple sfx module by Igor Pavlov with no adjustable parameters
         /// </summary>
         Simple,
+
         /// <summary>
         /// The installer sfx module by Igor Pavlov
         /// </summary>
         Installer,
+
         /// <summary>
-        /// The extended installer sfx module by Oleg Scherbakov 
+        /// The extended installer sfx module by Oleg Scherbakov
         /// </summary>
         Extended,
+
         /// <summary>
         /// The custom sfx module. First you must specify the module file name.
         /// </summary>
@@ -198,7 +203,7 @@
                     using (var scr = XmlReader.Create(schm))
                     {
                         sc.Add(null, scr);
-                        var settings = new XmlReaderSettings {ValidationType = ValidationType.Schema, Schemas = sc};
+                        var settings = new XmlReaderSettings { ValidationType = ValidationType.Schema, Schemas = sc };
                         var validationErrors = "";
                         settings.ValidationEventHandler +=
                             ((s, t) =>
@@ -263,14 +268,14 @@
             }
 
             var commands = _sfxCommands[SfxModule];
-            
+
             if (commands == null)
             {
                 return;
             }
-            
+
             var invalidCommands = new List<string>();
-            
+
             foreach (var command in settings.Keys)
             {
                 if (!commands.Contains(command))
@@ -278,16 +283,16 @@
                     invalidCommands.Add(command);
                 }
             }
-            
+
             if (invalidCommands.Count > 0)
             {
                 var invalidText = new StringBuilder("\nInvalid commands:\n");
-                
+
                 foreach (var str in invalidCommands)
                 {
                     invalidText.Append(str);
                 }
-                
+
                 throw new SevenZipSfxValidationException(invalidText.ToString());
             }
         }
@@ -302,7 +307,7 @@
             var ms = new MemoryStream();
             var buf = Encoding.UTF8.GetBytes(@";!@Install@!UTF-8!" + '\n');
             ms.Write(buf, 0, buf.Length);
-            
+
             foreach (var command in settings.Keys)
             {
                 buf =
@@ -310,10 +315,10 @@
                                                          settings[command]));
                 ms.Write(buf, 0, buf.Length);
             }
-           
+
             buf = Encoding.UTF8.GetBytes(@";!@InstallEnd@!");
             ms.Write(buf, 0, buf.Length);
-            
+
             return ms;
         }
 
@@ -323,9 +328,11 @@
             {
                 default:
                     return null;
+
                 case SfxModule.Installer:
-                    var settings = new Dictionary<string, string> {{"Title", "7-Zip self-extracting archive"}};
+                    var settings = new Dictionary<string, string> { { "Title", "7-Zip self-extracting archive" } };
                     return settings;
+
                 case SfxModule.Default:
                 case SfxModule.Extended:
                     settings = new Dictionary<string, string>
@@ -360,7 +367,7 @@
             src.Seek(0, SeekOrigin.Begin);
             var buf = new byte[32768];
             int bytesRead;
-            
+
             while ((bytesRead = src.Read(buf, 0, buf.Length)) > 0)
             {
                 dest.Write(buf, 0, bytesRead);
@@ -501,5 +508,6 @@
             }
         }
     }
+
 #endif
 }

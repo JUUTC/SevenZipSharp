@@ -1,6 +1,9 @@
 # Changelog
 ## 1.0.1 - Branch https://github.com/JUUTC/SevenZipSharp (2023-11-XX) 
-- Upgraded to .NET 7. Changed streaminfo index to use long 
+- Upgraded to .NET 7.
+- Use 7z 23.0.1
+- Changed Streaminfo index from int to long to support zipping more than ~2.4 million files
+- CodeMaid clean
 
 ## 1.0.0 - Branch https://github.com/joelodell/SevenZipSharp (2021-08-XX) 
 - Added CompressStreamsMultiVolumeAsync which requires the caller to subscribe to two new events: CreatingNewVolume and ProvideNextSourceStream. The CreatingNewVolume event fires when a new volume needs to be created. The caller provides a new stream for the new volume. When the compressor is ready to compress a file, ProvideNextSourceStream is fired. The caller provides the source stream for the requested file.

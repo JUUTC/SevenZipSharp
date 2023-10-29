@@ -8,6 +8,7 @@ namespace SevenZip
     using System.IO;
     using System.Linq;
 
+    using SevenZip.LZMA;
     using SevenZip.Sdk.Compression.Lzma;
 
     /// <summary>
@@ -176,7 +177,7 @@ namespace SevenZip
         /// </summary>
         /// <param name="archiveStream">The stream to read the archive from.
         /// Use SevenZipExtractor(string) to extract from disk, though it is not necessary.</param>
-        /// <param name="leaveOpen">Leaves the base stream open.</param>        
+        /// <param name="leaveOpen">Leaves the base stream open.</param>
         /// <param name="format">Manual archive format setup. You SHOULD NOT normally specify it this way.
         /// Instead, use SevenZipExtractor(Stream archiveStream), that constructor
         /// automatically detects the archive format.</param>
@@ -273,7 +274,7 @@ namespace SevenZip
             Init(archiveStream);
         }
 
-        #endregion
+        #endregion Constructors
 
         #region Properties
 
@@ -380,7 +381,7 @@ namespace SevenZip
         /// </summary>
         public bool PreserveDirectoryStructure { get; set; }
 
-        #endregion
+        #endregion Properties
 
         /// <summary>
         /// Checked whether the class was disposed.
@@ -448,7 +449,7 @@ namespace SevenZip
 
         /// <summary>
         /// Opens the archive and throws exceptions or returns OperationResult.DataError if any error occurs.
-        /// </summary>       
+        /// </summary>
         /// <param name="archiveStream">The IInStream compliant class instance, that is, the input stream.</param>
         /// <param name="openCallback">The ArchiveOpenCallback instance.</param>
         /// <returns>OperationResult.Ok if Open() succeeds.</returns>
@@ -488,7 +489,7 @@ namespace SevenZip
         /// <summary>
         /// Retrieves all information about the archive.
         /// </summary>
-        /// <exception cref="SevenZip.SevenZipArchiveException"/>
+        /// <exception cref="Exceptions.SevenZipArchiveException"/>
         private void GetArchiveInfo(bool disposeStream)
         {
             if (_archive == null)
@@ -565,7 +566,7 @@ namespace SevenZip
                                 }
                             }
 
-                            #endregion
+                            #endregion Getting archive items data
 
                             #region Getting archive properties
 
@@ -609,7 +610,7 @@ namespace SevenZip
                                 _isSolid = true;
                             }
 
-                            #endregion
+                            #endregion Getting archive properties
                         }
                         catch (Exception)
                         {
@@ -730,7 +731,8 @@ namespace SevenZip
             callback.FileExists -= FileExistsEventProxy;
         }
 
-        #endregion        
+        #endregion Core private functions
+
 #endif
 
         /// <summary>
@@ -830,7 +832,7 @@ namespace SevenZip
             _disposed = true;
         }
 
-        #endregion
+        #endregion IDisposable Members
 
         #region Core public Members
 
@@ -905,9 +907,9 @@ namespace SevenZip
             OnEvent(FileExists, e, true);
         }
 
-        #endregion
+        #endregion Event proxies
 
-        #endregion
+        #endregion Events
 
         #region Properties
 
@@ -972,7 +974,8 @@ namespace SevenZip
                 return _volumeFileNames;
             }
         }
-        #endregion
+
+        #endregion Properties
 
         /// <summary>
         /// Performs the archive integrity test.
@@ -1146,7 +1149,7 @@ namespace SevenZip
             ThrowUserException();
         }
 
-        #endregion
+        #endregion ExtractFile overloads
 
         #region ExtractFiles overloads
 
@@ -1196,7 +1199,7 @@ namespace SevenZip
                 uIndexes = SolidIndexes(uIndexes);
             }
 
-            #endregion
+            #endregion Indexes stuff
 
             try
             {
@@ -1356,7 +1359,7 @@ namespace SevenZip
             }
         }
 
-        #endregion
+        #endregion ExtractFiles overloads
 
         /// <summary>
         /// Unpacks the whole archive to the specified directory.
@@ -1417,7 +1420,7 @@ namespace SevenZip
             ThrowUserException();
         }
 
-        #endregion
+        #endregion Core public Members
 
 #endif
 
@@ -1490,6 +1493,6 @@ namespace SevenZip
             }
         }
 
-        #endregion
+        #endregion LZMA SDK functions
     }
 }

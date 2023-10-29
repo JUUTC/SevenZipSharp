@@ -1,6 +1,5 @@
 ﻿namespace SevenZip.Tests
 {
-    using System;
     using NUnit.Framework;
 
     /// <remarks>
@@ -157,7 +156,7 @@
             compressor.CustomParameters.Add("lc", "4");
             compressor.CustomParameters.Add("lp", "1");
             compressor.CustomParameters.Add("pb", "3");
-            
+
             compressor.CompressFiles(TemporaryFile, @"TestData\zip.zip");
         }
 

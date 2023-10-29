@@ -2,7 +2,7 @@ namespace SevenZip.Sdk.Compression.Lzma
 {
     internal abstract class Base
     {
-        public const uint kAlignMask = (kAlignTableSize - 1);
+        public const uint kAlignMask = kAlignTableSize - 1;
         public const uint kAlignTableSize = 1 << kNumAlignBits;
         public const int kDicLogSizeMin = 0;
         public const uint kEndPosModelIndex = 14;
@@ -14,7 +14,7 @@ namespace SevenZip.Sdk.Compression.Lzma
 
         public const int kNumAlignBits = 4;
 
-        public const uint kNumFullDistances = 1 << ((int)kEndPosModelIndex / 2);
+        public const uint kNumFullDistances = 1 << (int)kEndPosModelIndex / 2;
         public const int kNumHighLenBits = 8;
 
         public const uint kNumLenSymbols = kNumLowLenSymbols + kNumMidLenSymbols +
@@ -34,8 +34,8 @@ namespace SevenZip.Sdk.Compression.Lzma
         public const int kNumPosSlotBits = 6;
         public const int kNumPosStatesBitsEncodingMax = 4;
         public const int kNumPosStatesBitsMax = 4;
-        public const uint kNumPosStatesEncodingMax = (1 << kNumPosStatesBitsEncodingMax);
-        public const uint kNumPosStatesMax = (1 << kNumPosStatesBitsMax);
+        public const uint kNumPosStatesEncodingMax = 1 << kNumPosStatesBitsEncodingMax;
+        public const uint kNumPosStatesMax = 1 << kNumPosStatesBitsMax;
         public const uint kNumRepDistances = 4;
         public const uint kNumStates = 12;
         public const uint kStartPosModelIndex = 4;
@@ -45,7 +45,7 @@ namespace SevenZip.Sdk.Compression.Lzma
             len -= kMatchMinLen;
             if (len < kNumLenToPosStates)
                 return len;
-            return (kNumLenToPosStates - 1);
+            return kNumLenToPosStates - 1;
         }
 
         #region Nested type: State

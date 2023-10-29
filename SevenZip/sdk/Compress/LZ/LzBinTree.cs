@@ -77,7 +77,7 @@ namespace SevenZip.Sdk.Compression.LZ
             uint windowReservSize = (historySize + keepAddBufferBefore +
                                        matchMaxLen + keepAddBufferAfter) / 2 + 256;
 
-            base.Create(historySize + keepAddBufferBefore, matchMaxLen + keepAddBufferAfter, windowReservSize);
+            Create(historySize + keepAddBufferBefore, matchMaxLen + keepAddBufferAfter, windowReservSize);
 
             _matchMaxLen = matchMaxLen;
 
@@ -90,13 +90,13 @@ namespace SevenZip.Sdk.Compression.LZ
             if (HASH_ARRAY)
             {
                 hs = historySize - 1;
-                hs |= (hs >> 1);
-                hs |= (hs >> 2);
-                hs |= (hs >> 4);
-                hs |= (hs >> 8);
+                hs |= hs >> 1;
+                hs |= hs >> 2;
+                hs |= hs >> 4;
+                hs |= hs >> 8;
                 hs >>= 1;
                 hs |= 0xFFFF;
-                if (hs > (1 << 24))
+                if (hs > 1 << 24)
                     hs >>= 1;
                 _hashMask = hs;
                 hs++;
@@ -122,7 +122,7 @@ namespace SevenZip.Sdk.Compression.LZ
             }
 
             uint offset = 0;
-            uint matchMinPos = (_pos > _cyclicBufferSize) ? (_pos - _cyclicBufferSize) : 0;
+            uint matchMinPos = _pos > _cyclicBufferSize ? _pos - _cyclicBufferSize : 0;
             uint cur = _bufferOffset + _pos;
             uint maxLen = kStartMaxLen; // to avoid items for len < hashSize;
             uint hashValue, hash2Value = 0, hash3Value = 0;
@@ -130,13 +130,13 @@ namespace SevenZip.Sdk.Compression.LZ
             if (HASH_ARRAY)
             {
                 uint temp = CRC.Table[_bufferBase[cur]] ^ _bufferBase[cur + 1];
-                hash2Value = (temp & (((int)kHash2Size) - 1));
-                temp ^= (uint)((_bufferBase[cur + 2]) << 8);
-                hash3Value = (temp & (((int)kHash3Size) - 1));
-                hashValue = (temp ^ (CRC.Table[_bufferBase[cur + 3]] << 5)) & _hashMask;
+                hash2Value = temp & (int)kHash2Size - 1;
+                temp ^= (uint)(_bufferBase[cur + 2] << 8);
+                hash3Value = temp & (int)kHash3Size - 1;
+                hashValue = (temp ^ CRC.Table[_bufferBase[cur + 3]] << 5) & _hashMask;
             }
             else
-                hashValue = _bufferBase[cur] ^ ((uint)(_bufferBase[cur + 1]) << 8);
+                hashValue = _bufferBase[cur] ^ (uint)_bufferBase[cur + 1] << 8;
 
             uint curMatch = _hash[kFixHashSize + hashValue];
             if (HASH_ARRAY)
@@ -170,7 +170,7 @@ namespace SevenZip.Sdk.Compression.LZ
             _hash[kFixHashSize + hashValue] = _pos;
 
             uint ptr0 = (_cyclicBufferPos << 1) + 1;
-            uint ptr1 = (_cyclicBufferPos << 1);
+            uint ptr1 = _cyclicBufferPos << 1;
 
             uint len0, len1;
             len0 = len1 = kNumHashDirectBytes;
@@ -198,11 +198,11 @@ namespace SevenZip.Sdk.Compression.LZ
                     break;
                 }
                 uint delta = _pos - curMatch;
-                uint cyclicPos = ((delta <= _cyclicBufferPos)
+                uint cyclicPos = (delta <= _cyclicBufferPos
                                         ?
-                                            (_cyclicBufferPos - delta)
+                                            _cyclicBufferPos - delta
                                         :
-                                            (_cyclicBufferPos - delta + _cyclicBufferSize)) << 1;
+                                            _cyclicBufferPos - delta + _cyclicBufferSize) << 1;
 
                 uint pby1 = _bufferOffset + curMatch;
                 uint len = Math.Min(len0, len1);
@@ -259,7 +259,7 @@ namespace SevenZip.Sdk.Compression.LZ
                     }
                 }
 
-                uint matchMinPos = (_pos > _cyclicBufferSize) ? (_pos - _cyclicBufferSize) : 0;
+                uint matchMinPos = _pos > _cyclicBufferSize ? _pos - _cyclicBufferSize : 0;
                 uint cur = _bufferOffset + _pos;
 
                 uint hashValue;
@@ -267,21 +267,21 @@ namespace SevenZip.Sdk.Compression.LZ
                 if (HASH_ARRAY)
                 {
                     uint temp = CRC.Table[_bufferBase[cur]] ^ _bufferBase[cur + 1];
-                    uint hash2Value = (temp & (((int)kHash2Size) - 1));
+                    uint hash2Value = temp & (int)kHash2Size - 1;
                     _hash[hash2Value] = _pos;
-                    temp ^= ((uint)(_bufferBase[cur + 2]) << 8);
-                    uint hash3Value = (temp & (((int)kHash3Size) - 1));
+                    temp ^= (uint)_bufferBase[cur + 2] << 8;
+                    uint hash3Value = temp & (int)kHash3Size - 1;
                     _hash[kHash3Offset + hash3Value] = _pos;
-                    hashValue = (temp ^ (CRC.Table[_bufferBase[cur + 3]] << 5)) & _hashMask;
+                    hashValue = (temp ^ CRC.Table[_bufferBase[cur + 3]] << 5) & _hashMask;
                 }
                 else
-                    hashValue = _bufferBase[cur] ^ ((uint)(_bufferBase[cur + 1]) << 8);
+                    hashValue = _bufferBase[cur] ^ (uint)_bufferBase[cur + 1] << 8;
 
                 uint curMatch = _hash[kFixHashSize + hashValue];
                 _hash[kFixHashSize + hashValue] = _pos;
 
                 uint ptr0 = (_cyclicBufferPos << 1) + 1;
-                uint ptr1 = (_cyclicBufferPos << 1);
+                uint ptr1 = _cyclicBufferPos << 1;
 
                 uint len0, len1;
                 len0 = len1 = kNumHashDirectBytes;
@@ -296,11 +296,11 @@ namespace SevenZip.Sdk.Compression.LZ
                     }
 
                     uint delta = _pos - curMatch;
-                    uint cyclicPos = ((delta <= _cyclicBufferPos)
+                    uint cyclicPos = (delta <= _cyclicBufferPos
                                             ?
-                                                (_cyclicBufferPos - delta)
+                                                _cyclicBufferPos - delta
                                             :
-                                                (_cyclicBufferPos - delta + _cyclicBufferSize)) << 1;
+                                                _cyclicBufferPos - delta + _cyclicBufferSize) << 1;
 
                     uint pby1 = _bufferOffset + curMatch;
                     uint len = Math.Min(len0, len1);
@@ -339,7 +339,7 @@ namespace SevenZip.Sdk.Compression.LZ
 
         public void SetType(int numHashBytes)
         {
-            HASH_ARRAY = (numHashBytes > 2);
+            HASH_ARRAY = numHashBytes > 2;
             if (HASH_ARRAY)
             {
                 kNumHashDirectBytes = 0;

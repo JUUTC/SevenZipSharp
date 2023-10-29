@@ -7,12 +7,14 @@ namespace SevenZip
 #if NET472 || NETSTANDARD2_0
     using System.Security.Permissions;
 #endif
+
     using System.IO;
     using System.Reflection;
     using System.Runtime.InteropServices;
     using System.Text;
 
 #if UNMANAGED
+
     /// <summary>
     /// 7-zip library low-level wrapper.
     /// </summary>
@@ -27,7 +29,7 @@ namespace SevenZip
         /// Path to the 7-zip dll.
         /// </summary>
         /// <remarks>7zxa.dll supports only decoding from .7z archives.
-        /// Features of 7za.dll: 
+        /// Features of 7za.dll:
         ///     - Supporting 7z format;
         ///     - Built encoders: LZMA, PPMD, BCJ, BCJ2, COPY, AES-256 Encryption.
         ///     - Built decoders: LZMA, PPMD, BCJ, BCJ2, COPY, AES-256 Encryption, BZip2, Deflate.
@@ -41,8 +43,8 @@ namespace SevenZip
             {
                 return ConfigurationManager.AppSettings["7zLocation"];
             }
-	
-            if (string.IsNullOrEmpty(Assembly.GetExecutingAssembly().Location)) 
+
+            if (string.IsNullOrEmpty(Assembly.GetExecutingAssembly().Location))
             {
                 return null;
             }
@@ -178,7 +180,7 @@ namespace SevenZip
             }
         }
 
-        static readonly string Namespace = Assembly.GetExecutingAssembly().GetManifestResourceNames()[0].Split('.')[0];
+        private static readonly string Namespace = Assembly.GetExecutingAssembly().GetManifestResourceNames()[0].Split('.')[0];
 
         private static string GetResourceString(string str)
         {
@@ -188,7 +190,7 @@ namespace SevenZip
         private static bool ExtractionBenchmark(string archiveFileName, Stream outStream, ref LibraryFeature? features, LibraryFeature testedFeature)
         {
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(GetResourceString(archiveFileName));
-            
+
             try
             {
                 using (var extractor = new SevenZipExtractor(stream))
@@ -268,7 +270,7 @@ namespace SevenZip
                         ExtractionBenchmark("Test.zip", outStream, ref _features, LibraryFeature.ExtractZip);
                     }
 
-                    #endregion
+                    #endregion Extraction features
 
                     #region Compression features
 
@@ -324,9 +326,9 @@ namespace SevenZip
                         }
                     }
 
-                    #endregion
+                    #endregion Compression features
 
-                    #endregion
+                    #endregion Benchmark
 
                     if (_features != null && ModifyCapable && (_features.Value & LibraryFeature.Compress7z) != 0)
                     {
@@ -350,7 +352,7 @@ namespace SevenZip
             sp.Demand();
 #endif
             lock (SyncRoot)
-			{
+            {
                 if (_modulePtr != IntPtr.Zero)
                 {
                     if (format is InArchiveFormat archiveFormat)
@@ -360,14 +362,14 @@ namespace SevenZip
                             _inArchives[user][archiveFormat] != null)
                         {
                             try
-                            {                            
+                            {
                                 Marshal.ReleaseComObject(_inArchives[user][archiveFormat]);
                             }
-                            catch (InvalidComObjectException) {}
-                            
+                            catch (InvalidComObjectException) { }
+
                             _inArchives[user].Remove(archiveFormat);
                             _totalUsers--;
-                            
+
                             if (_inArchives[user].Count == 0)
                             {
                                 _inArchives.Remove(user);
@@ -385,11 +387,11 @@ namespace SevenZip
                             {
                                 Marshal.ReleaseComObject(_outArchives[user][outArchiveFormat]);
                             }
-                            catch (InvalidComObjectException) {}
-                            
+                            catch (InvalidComObjectException) { }
+
                             _outArchives[user].Remove(outArchiveFormat);
                             _totalUsers--;
-                            
+
                             if (_outArchives[user].Count == 0)
                             {
                                 _outArchives.Remove(user);
@@ -409,7 +411,7 @@ namespace SevenZip
                         }
                     }
                 }
-			}
+            }
         }
 
         /// <summary>
@@ -461,7 +463,7 @@ namespace SevenZip
                         throw new SevenZipLibraryException("Your 7-zip library does not support this archive type.");
                     }
 
-                    InitUserInFormat(user, format);									
+                    InitUserInFormat(user, format);
                     _inArchives[user][format] = result as IInArchive;
                 }
 
@@ -472,7 +474,7 @@ namespace SevenZip
         /// <summary>
         /// Gets IOutArchive interface to pack 7-zip archives.
         /// </summary>
-        /// <param name="format">Archive format.</param>  
+        /// <param name="format">Archive format.</param>
         /// <param name="user">Archive format user.</param>
         public static IOutArchive OutArchive(OutArchiveFormat format, object user)
         {
@@ -494,13 +496,12 @@ namespace SevenZip
                             NativeMethods.GetProcAddress(_modulePtr, "CreateObject"),
                             typeof(NativeMethods.CreateObjectDelegate));
                     var interfaceId = typeof(IOutArchive).GUID;
-                    
 
                     try
                     {
                         var classId = Formats.OutFormatGuids[format];
                         createObject(ref classId, ref interfaceId, out var result);
-                        
+
                         InitUserOutFormat(user, format);
                         _outArchives[user][format] = result as IOutArchive;
                     }
@@ -520,7 +521,7 @@ namespace SevenZip
             {
                 throw new SevenZipLibraryException($"can not change the library path while the library \"{_libraryFileName}\" is being used.");
             }
-            
+
             if (!File.Exists(libraryPath))
             {
                 throw new SevenZipLibraryException($"can not change the library path because the file \"{libraryPath}\" does not exist.");
@@ -530,5 +531,6 @@ namespace SevenZip
             _features = null;
         }
     }
+
 #endif
 }

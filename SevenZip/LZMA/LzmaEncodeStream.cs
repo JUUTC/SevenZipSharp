@@ -148,7 +148,7 @@
         /// <summary>
         /// Checked whether the class was disposed.
         /// </summary>
-        /// <exception cref="System.ObjectDisposedException" />
+        /// <exception cref="ObjectDisposedException" />
         private void DisposedCheck()
         {
             if (_disposed)
@@ -168,7 +168,7 @@
             _buffer.Position = 0;
             for (int i = 0; i < 8; i++)
             {
-                _output.WriteByte((byte)(streamSize >> (8 * i)));
+                _output.WriteByte((byte)(streamSize >> 8 * i));
             }
             _lzmaEncoder.Code(_buffer, _output, -1, -1, null);
             _buffer.Position = 0;

@@ -1,9 +1,9 @@
 ﻿namespace SevenZip.Tests
 {
+    using NUnit.Framework;
+
     using System.IO;
     using System.Threading;
-
-    using NUnit.Framework;
 
     public abstract class TestBase
     {

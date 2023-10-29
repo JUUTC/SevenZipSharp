@@ -38,7 +38,7 @@ namespace SevenZip.Sdk.Compression.LZ
         public bool Train(Stream stream)
         {
             long len = stream.Length;
-            uint size = (len < _windowSize) ? (uint)len : _windowSize;
+            uint size = len < _windowSize ? (uint)len : _windowSize;
             TrainSize = size;
             stream.Position = len - size;
             _streamPos = _pos = 0;

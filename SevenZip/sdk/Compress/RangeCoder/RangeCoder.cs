@@ -4,7 +4,7 @@ namespace SevenZip.Sdk.Compression.RangeCoder
 
     internal class Encoder
     {
-        public const uint kTopValue = (1 << 24);
+        public const uint kTopValue = 1 << 24;
         private byte _cache;
         private uint _cacheSize;
 
@@ -71,10 +71,10 @@ namespace SevenZip.Sdk.Compression.RangeCoder
                     Stream.WriteByte((byte)(temp + (Low >> 32)));
                     temp = 0xFF;
                 } while (--_cacheSize != 0);
-                _cache = (byte)(((uint)Low) >> 24);
+                _cache = (byte)((uint)Low >> 24);
             }
             _cacheSize++;
-            Low = ((uint)Low) << 8;
+            Low = (uint)Low << 8;
         }
 
         public void EncodeDirectBits(uint v, int numTotalBits)
@@ -82,7 +82,7 @@ namespace SevenZip.Sdk.Compression.RangeCoder
             for (int i = numTotalBits - 1; i >= 0; i--)
             {
                 Range >>= 1;
-                if (((v >> i) & 1) == 1)
+                if ((v >> i & 1) == 1)
                     Low += Range;
                 if (Range < kTopValue)
                 {
@@ -119,7 +119,7 @@ namespace SevenZip.Sdk.Compression.RangeCoder
 
     internal class Decoder
     {
-        public const uint kTopValue = (1 << 24);
+        public const uint kTopValue = 1 << 24;
         public uint Code;
         public uint Range;
 
@@ -134,7 +134,7 @@ namespace SevenZip.Sdk.Compression.RangeCoder
             Code = 0;
             Range = 0xFFFFFFFF;
             for (int i = 0; i < 5; i++)
-                Code = (Code << 8) | (byte)Stream.ReadByte();
+                Code = Code << 8 | (byte)Stream.ReadByte();
         }
 
         public void ReleaseStream()
@@ -194,13 +194,13 @@ namespace SevenZip.Sdk.Compression.RangeCoder
 					result |= 1;
 				}
 				*/
-                uint t = (code - range) >> 31;
-                code -= range & (t - 1);
-                result = (result << 1) | (1 - t);
+                uint t = code - range >> 31;
+                code -= range & t - 1;
+                result = result << 1 | 1 - t;
 
                 if (range < kTopValue)
                 {
-                    code = (code << 8) | (byte)Stream.ReadByte();
+                    code = code << 8 | (byte)Stream.ReadByte();
                     range <<= 8;
                 }
             }

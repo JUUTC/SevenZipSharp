@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SevenZip
 {
-
-
     /// <summary>
     /// Represents information about a stream.
     /// </summary>

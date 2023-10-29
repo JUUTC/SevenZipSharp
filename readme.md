@@ -12,6 +12,8 @@ As required by the GNU GPL 3.0 license, here's a rough list of what has changed 
 * Changed Streaminfo index from int to long to support zipping more than ~2.4 million files
 * CodeMaid clean
 * Target .NET version changed from .NET Standard 2.0, .NET Framework 4.7.2 and .NET Core 3.1. to .NET 7.0
+
+-------------------------------------------------------------
 * Target .NET version changed from .NET Framework 2.0 to .NET Standard 2.0, .NET Framework 4.7.2 and .NET Core 3.1.
 * Produces two NuGet packages, one full-feature package and a `Lite` variant without SFX support (and significantly smaller size).
 * Continous Integration added, both building and deploying.

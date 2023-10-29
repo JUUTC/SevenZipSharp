@@ -50,8 +50,8 @@ namespace SevenZip.Sdk.Buffer
             int aNumProcessedBytes = m_Stream.Read(m_Buffer, 0, (int)m_BufferSize);
             m_Pos = 0;
             m_Limit = (uint)aNumProcessedBytes;
-            m_StreamWasExhausted = (aNumProcessedBytes == 0);
-            return (!m_StreamWasExhausted);
+            m_StreamWasExhausted = aNumProcessedBytes == 0;
+            return !m_StreamWasExhausted;
         }
 
         /// <summary>

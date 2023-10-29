@@ -54,7 +54,7 @@ namespace SevenZip
             _asynchronousDisposeLock = false;
         }
 
-        #endregion
+        #endregion Asynchronous core methods
 
         #region Delegates
 
@@ -97,7 +97,8 @@ namespace SevenZip
         /// </summary>
         /// <param name="extractFileCallback">The callback to call for each file in the archive.</param>
         private delegate void ExtractFiles3Delegate(ExtractFileCallback extractFileCallback);
-        #endregion
+
+        #endregion Delegates
 
         /// <summary>
         /// Unpacks the whole archive asynchronously to the specified directory name at the specified priority.

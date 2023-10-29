@@ -1,14 +1,12 @@
 ﻿namespace SevenZip.Tests
 {
+    using NUnit.Framework;
+
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading;
-
-    using SevenZip;
-
-    using NUnit.Framework;
 
     [TestFixture]
     public class SevenZipExtractorTests : TestBase
@@ -181,10 +179,10 @@
         [Test]
         public void ThreadedExtractionTest()
         {
-	        var destination1 = Path.Combine(OutputDirectory, "t1");
-	        var destination2 = Path.Combine(OutputDirectory, "t2");
+            var destination1 = Path.Combine(OutputDirectory, "t1");
+            var destination2 = Path.Combine(OutputDirectory, "t2");
 
-			var t1 = new Thread(() =>
+            var t1 = new Thread(() =>
             {
                 using (var tmp = new SevenZipExtractor(@"TestData\multiple_files.7z"))
                 {
@@ -204,11 +202,11 @@
             t1.Join();
             t2.Join();
 
-			Assert.IsTrue(Directory.Exists(destination1));
-	        Assert.IsTrue(Directory.Exists(destination2));
-			Assert.AreEqual(3, Directory.GetFiles(destination1).Length);
-	        Assert.AreEqual(3, Directory.GetFiles(destination2).Length);
-		}
+            Assert.IsTrue(Directory.Exists(destination1));
+            Assert.IsTrue(Directory.Exists(destination2));
+            Assert.AreEqual(3, Directory.GetFiles(destination1).Length);
+            Assert.AreEqual(3, Directory.GetFiles(destination2).Length);
+        }
 
         [Test, Ignore("Figure out why this fails, later.")]
         public void ExtractArchiveWithLongPath()

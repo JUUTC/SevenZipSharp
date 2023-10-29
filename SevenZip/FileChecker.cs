@@ -4,6 +4,7 @@
     using System.IO;
 
 #if UNMANAGED
+
     /// <summary>
     /// The signature checker class. Original code by Siddharth Uppal, adapted by Markhor.
     /// </summary>
@@ -85,7 +86,7 @@
 
             var actualSignature = BitConverter.ToString(signature);
 
-            #endregion
+            #endregion Get file signature
 
             var suspectedFormat = InArchiveFormat.XZ; // any except PE and Cab
             isExecutable = false;
@@ -120,7 +121,7 @@
             {
                 SpecialDetect(stream, 257, InArchiveFormat.Tar);
             }
-            catch (ArgumentException) {}
+            catch (ArgumentException) { }
 
             if (SpecialDetect(stream, 0x8001, InArchiveFormat.Iso))
             {
@@ -167,9 +168,9 @@
                 }
             }
 
-            #endregion
+            #endregion Last resort for tar - can mistake
 
-            #endregion
+            #endregion SpecialDetect
 
             #region Check if it is an SFX archive or a file with an embedded archive.
 
@@ -192,11 +193,11 @@
 
                 actualSignature = BitConverter.ToString(signature);
 
-                #endregion
+                #endregion Get first Min(stream.Length, SFX_SCAN_LENGTH) bytes
 
-                foreach (var format in new[] 
+                foreach (var format in new[]
                 {
-                    InArchiveFormat.Zip, 
+                    InArchiveFormat.Zip,
                     InArchiveFormat.SevenZip,
                     InArchiveFormat.Rar4,
                     InArchiveFormat.Rar,
@@ -220,7 +221,7 @@
                 }
             }
 
-            #endregion
+            #endregion Check if it is an SFX archive or a file with an embedded archive.
 
             throw new ArgumentException("The stream is invalid or no corresponding signature was found.");
         }
@@ -250,5 +251,6 @@
             }
         }
     }
+
 #endif
 }

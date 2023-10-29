@@ -50,12 +50,12 @@ namespace SevenZip.Sdk.Compression.LZ
 
         public void MoveBlock()
         {
-            uint offset = (_bufferOffset) + _pos - _keepSizeBefore;
+            uint offset = _bufferOffset + _pos - _keepSizeBefore;
             // we need one additional byte, since MovePos moves on 1 byte.
             if (offset > 0)
                 offset--;
 
-            uint numBytes = (_bufferOffset) + _streamPos - offset;
+            uint numBytes = _bufferOffset + _streamPos - offset;
 
             // check negative offset ????
             for (uint i = 0; i < numBytes; i++)
@@ -69,7 +69,7 @@ namespace SevenZip.Sdk.Compression.LZ
                 return;
             while (true)
             {
-                var size = (int)((0 - _bufferOffset) + _blockSize - _streamPos);
+                var size = (int)(0 - _bufferOffset + _blockSize - _streamPos);
                 if (size == 0)
                     return;
                 int numReadBytes = _stream.Read(_bufferBase, (int)(_bufferOffset + _streamPos), size);
@@ -78,7 +78,7 @@ namespace SevenZip.Sdk.Compression.LZ
                     _posLimit = _streamPos;
                     uint pointerToPostion = _bufferOffset + _posLimit;
                     if (pointerToPostion > _pointerToLastSafePosition)
-                        _posLimit = (_pointerToLastSafePosition - _bufferOffset);
+                        _posLimit = _pointerToLastSafePosition - _bufferOffset;
 
                     _streamEndWasReached = true;
                     return;
@@ -154,7 +154,7 @@ namespace SevenZip.Sdk.Compression.LZ
         public uint GetMatchLen(int index, uint distance, uint limit)
         {
             if (_streamEndWasReached)
-                if ((_pos + index) + limit > _streamPos)
+                if (_pos + index + limit > _streamPos)
                     limit = _streamPos - (uint)(_pos + index);
             distance++;
             // Byte *pby = _buffer + (size_t)_pos + index;

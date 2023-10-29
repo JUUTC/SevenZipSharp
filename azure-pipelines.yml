@@ -41,9 +41,9 @@ steps:
     packDestination: $(Build.ArtifactStagingDirectory)
     versioningScheme: 'byPrereleaseNumber'
     configuration: '$(buildConfiguration)'
-    majorVersion: '1'
+    majorVersion: '2'
     minorVersion: '0'
-    patchVersion: '1'
+    patchVersion: '0
 
 - task: NuGetCommand@2
   displayName: 'NuGet Publish SevenZip'

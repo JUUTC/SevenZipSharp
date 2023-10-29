@@ -5,9 +5,11 @@
     using System.Globalization;
     using System.IO;
     using System.Runtime.InteropServices;
+
 #if NET472 || NETSTANDARD2_0
     using System.Security.Permissions;
 #endif
+
     using FILETIME = System.Runtime.InteropServices.ComTypes.FILETIME;
 
 #if UNMANAGED
@@ -20,8 +22,8 @@
     [StructLayout(LayoutKind.Sequential)]
     internal struct PropArray
     {
-        readonly uint _cElems;
-        readonly IntPtr _pElems;
+        private readonly uint _cElems;
+        private readonly IntPtr _pElems;
     }
 
     /// <summary>
@@ -56,12 +58,12 @@
         {
             private get
             {
-                return (VarEnum) _vt;
+                return (VarEnum)_vt;
             }
 
             set
             {
-                _vt = (ushort) value;
+                _vt = (ushort)value;
             }
         }
 
@@ -77,7 +79,7 @@
         /// <summary>
         /// Gets or sets the UInt32 value of the COM variant.
         /// </summary>
-        
+
         public uint UInt32Value
         {
             get => _uInt32Value;
@@ -87,7 +89,7 @@
         /// <summary>
         /// Gets or sets the UInt32 value of the COM variant.
         /// </summary>
-        
+
         public int Int32Value
         {
             get => _int32Value;
@@ -97,7 +99,7 @@
         /// <summary>
         /// Gets or sets the Int64 value of the COM variant
         /// </summary>
-        
+
         public long Int64Value
         {
             get => _int64Value;
@@ -107,7 +109,7 @@
         /// <summary>
         /// Gets or sets the UInt64 value of the COM variant
         /// </summary>
-        
+
         public ulong UInt64Value
         {
             get => _uInt64Value;
@@ -130,8 +132,10 @@
                 {
                     case VarEnum.VT_BSTR:
                         return Marshal.PtrToStringBSTR(Value);
+
                     case VarEnum.VT_EMPTY:
                         return null;
+
                     case VarEnum.VT_FILETIME:
                         try
                         {
@@ -143,7 +147,7 @@
                         }
                     default:
                         var propHandle = GCHandle.Alloc(this, GCHandleType.Pinned);
-                        
+
                         try
                         {
                             return Marshal.GetObjectForNativeVariant(propHandle.AddrOfPinnedObject());
@@ -154,12 +158,16 @@
                             {
                                 case VarEnum.VT_UI8:
                                     return UInt64Value;
+
                                 case VarEnum.VT_UI4:
                                     return UInt32Value;
+
                                 case VarEnum.VT_I8:
                                     return Int64Value;
+
                                 case VarEnum.VT_I4:
                                     return Int32Value;
+
                                 default:
                                     return 0;
                             }
@@ -252,10 +260,12 @@
         /// Extraction mode
         /// </summary>
         Extract = 0,
+
         /// <summary>
         /// Test mode
         /// </summary>
         Test,
+
         /// <summary>
         /// Skip mode
         /// </summary>
@@ -271,38 +281,47 @@
         /// Success
         /// </summary>
         Ok = 0,
+
         /// <summary>
         /// Method is unsupported
         /// </summary>
         UnsupportedMethod,
+
         /// <summary>
         /// Data error has occurred
         /// </summary>
         DataError,
+
         /// <summary>
         /// CrcError has occurred
         /// </summary>
         CrcError,
+
         /// <summary>
         /// File is unavailable
         /// </summary>
         Unavailable,
+
         /// <summary>
         /// Unexpected end of file
         /// </summary>
         UnexpectedEnd,
+
         /// <summary>
         /// Data after end of archive
         /// </summary>
         DataAfterEnd,
+
         /// <summary>
         /// File is not archive
         /// </summary>
         IsNotArc,
+
         /// <summary>
         /// Archive headers error
         /// </summary>
         HeadersError,
+
         /// <summary>
         /// Wrong password
         /// </summary>
@@ -318,187 +337,234 @@
         /// No property
         /// </summary>
         NoProperty = 0,
+
         MainSubfile,
+
         /// <summary>
         /// Handler item index
         /// </summary>
         HandlerItemIndex,
+
         /// <summary>
         /// Item path
         /// </summary>
         Path,
+
         /// <summary>
         /// Item name
         /// </summary>
         Name,
+
         /// <summary>
         /// Item extension
         /// </summary>
         Extension,
+
         /// <summary>
         /// true if the item is a folder; otherwise, false
         /// </summary>
         IsDirectory,
+
         /// <summary>
         /// Item size
         /// </summary>
         Size,
+
         /// <summary>
         /// Item packed sise; usually absent
         /// </summary>
         PackedSize,
+
         /// <summary>
         /// Item attributes; usually absent
         /// </summary>
         Attributes,
+
         /// <summary>
         /// Item creation time; usually absent
         /// </summary>
         CreationTime,
+
         /// <summary>
         /// Item last access time; usually absent
         /// </summary>
         LastAccessTime,
+
         /// <summary>
         /// Item last write time
         /// </summary>
         LastWriteTime,
+
         /// <summary>
         /// true if the item is solid; otherwise, false
         /// </summary>
         Solid,
+
         /// <summary>
         /// true if the item is commented; otherwise, false
         /// </summary>
         Commented,
+
         /// <summary>
         /// true if the item is encrypted; otherwise, false
         /// </summary>
         Encrypted,
+
         /// <summary>
         /// (?)
         /// </summary>
         SplitBefore,
+
         /// <summary>
         /// (?)
         /// </summary>
         SplitAfter,
+
         /// <summary>
         /// Dictionary size(?)
         /// </summary>
         DictionarySize,
+
         /// <summary>
         /// Item CRC checksum
         /// </summary>
         Crc,
+
         /// <summary>
         /// Item type(?)
         /// </summary>
         Type,
+
         /// <summary>
         /// (?)
         /// </summary>
         IsAnti,
+
         /// <summary>
         /// Compression method
         /// </summary>
         Method,
+
         /// <summary>
         /// (?); usually absent
         /// </summary>
         HostOS,
+
         /// <summary>
         /// Item file system; usually absent
         /// </summary>
         FileSystem,
+
         /// <summary>
         /// Item user(?); usually absent
         /// </summary>
         User,
+
         /// <summary>
         /// Item group(?); usually absent
         /// </summary>
         Group,
+
         /// <summary>
         /// Bloack size(?)
         /// </summary>
         Block,
+
         /// <summary>
         /// Item comment; usually absent
         /// </summary>
         Comment,
+
         /// <summary>
         /// Item position
         /// </summary>
         Position,
+
         /// <summary>
         /// Item prefix(?)
         /// </summary>
         Prefix,
+
         /// <summary>
         /// Number of subdirectories
         /// </summary>
         NumSubDirs,
+
         /// <summary>
         /// Numbers of subfiles
         /// </summary>
         NumSubFiles,
+
         /// <summary>
         /// The archive legacy unpacker version
         /// </summary>
         UnpackVersion,
+
         /// <summary>
         /// Volume(?)
         /// </summary>
         Volume,
+
         /// <summary>
         /// Is a volume
         /// </summary>
         IsVolume,
+
         /// <summary>
         /// Offset value(?)
         /// </summary>
         Offset,
+
         /// <summary>
         /// Links(?)
         /// </summary>
         Links,
+
         /// <summary>
         /// Number of blocks
         /// </summary>
         NumBlocks,
+
         /// <summary>
         /// Number of volumes(?)
         /// </summary>
         NumVolumes,
+
         /// <summary>
         /// Time type(?)
         /// </summary>
         TimeType,
+
         /// <summary>
         /// 64-bit(?)
         /// </summary>
         Bit64,
+
         /// <summary>
         /// BigEndian
         /// </summary>
         BigEndian,
+
         /// <summary>
         /// Cpu(?)
         /// </summary>
         Cpu,
+
         /// <summary>
         /// Physical archive size
         /// </summary>
         PhysicalSize,
+
         /// <summary>
         /// Headers size
         /// </summary>
         HeadersSize,
+
         /// <summary>
         /// Archive checksum
         /// </summary>
         Checksum,
+
         Characts,
         Va,
         Id,
@@ -508,30 +574,37 @@
         PosixAttrib,
         SymLink,
         Error,
+
         /// <summary>
         /// (?)
         /// </summary>
         TotalSize,
+
         /// <summary>
         /// (?)
         /// </summary>
         FreeSpace,
+
         /// <summary>
         /// Cluster size(?)
         /// </summary>
         ClusterSize,
+
         /// <summary>
         /// Volume name(?)
         /// </summary>
         VolumeName,
+
         /// <summary>
         /// Local item name(?); usually absent
         /// </summary>
         LocalName,
+
         /// <summary>
         /// (?)
         /// </summary>
         Provider,
+
         NtSecure,
         IsAltStream,
         IsAux,
@@ -550,10 +623,12 @@
         VirtualSize,
         UnpackSize,
         TotalPhySize,
+
         /// <summary>
         /// Index of the Volume
         /// </summary>
         VolumeIndex,
+
         SubType,
         ShortComment,
         CodePage,
@@ -570,6 +645,7 @@
         OutName,
         CopyLink,
         NumDefined,
+
         /// <summary>
         /// User defined property; usually absent
         /// </summary>
@@ -585,7 +661,9 @@
         /// PropId string names
         /// </summary>
         public static readonly Dictionary<ItemPropId, string> PropIdNames =
-#region Initialization
+
+        #region Initialization
+
             new Dictionary<ItemPropId, string>(46)
             {
                 {ItemPropId.Path, "Path"},
@@ -656,7 +734,8 @@
                 {ItemPropId.FreeSpace, "Free Space"},
                 {ItemPropId.ClusterSize, "Cluster Size"}
             };
-#endregion
+
+        #endregion Initialization
     }
 
     /// <summary>
@@ -867,7 +946,7 @@
         int GetStream(
             [MarshalAs(UnmanagedType.LPWStr)] string name,
             [Out, MarshalAs(UnmanagedType.Interface)] out IInStream inStream);
-    }    
+    }
 
     /// <summary>
     /// 7-zip ISequentialInStream imported interface
@@ -883,7 +962,7 @@
         /// <param name="data">Array of bytes available for writing</param>
         /// <param name="size">Array size</param>
         /// <returns>S_OK if success</returns>
-        /// <remarks>If (size > 0) and there are bytes in stream, 
+        /// <remarks>If (size > 0) and there are bytes in stream,
         /// this function must read at least 1 byte.
         /// This function is allowed to read less than "size" bytes.
         /// You must call Read function in loop, if you need exact amount of data.
@@ -910,7 +989,7 @@
         /// <returns>S_OK if success</returns>
         /// <remarks>If size != 0, return value is S_OK and (*processedSize == 0),
         ///  then there are no more bytes in stream.
-        /// If (size > 0) and there are bytes in stream, 
+        /// If (size > 0) and there are bytes in stream,
         /// this function must read at least 1 byte.
         /// This function is allowed to rwrite less than "size" bytes.
         /// You must call Write function in loop, if you need exact amount of data.
@@ -975,7 +1054,7 @@
         /// </summary>
         /// <param name="offset">Offset value</param>
         /// <param name="seekOrigin">Seek origin value</param>
-        /// <param name="newPosition">New position pointer</param>       
+        /// <param name="newPosition">New position pointer</param>
         void Seek(
             long offset, SeekOrigin seekOrigin, IntPtr newPosition);
 
@@ -991,9 +1070,9 @@
     /// <summary>
     /// 7-zip essential in archive interface
     /// </summary>
-    [ComImport]  
-	[Guid("23170F69-40C1-278A-0000-000600600000")]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]	
+    [ComImport]
+    [Guid("23170F69-40C1-278A-0000-000600600000")]
+    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     internal interface IInArchive
     {
         /// <summary>
@@ -1015,7 +1094,7 @@
         void Close();
 
         /// <summary>
-        /// Gets the number of files in the archive file table  .          
+        /// Gets the number of files in the archive file table  .
         /// </summary>
         /// <returns>The number of files in the archive</returns>
         uint GetNumberOfItems();
@@ -1136,8 +1215,9 @@
         /// <param name="names">The names of the properties</param>
         /// <param name="values">The values of the properties</param>
         /// <param name="numProperties">The properties count</param>
-        /// <returns></returns>        
+        /// <returns></returns>
         int SetProperties(IntPtr names, IntPtr values, int numProperties);
     }
+
 #endif
-            }
+}

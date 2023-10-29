@@ -1,5 +1,6 @@
 ﻿#if UNMANAGED
 
+
 namespace SevenZip
 {
     /// <summary>

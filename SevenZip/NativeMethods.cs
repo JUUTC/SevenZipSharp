@@ -4,6 +4,7 @@ namespace SevenZip
     using System.Runtime.InteropServices;
 
 #if UNMANAGED
+
     internal static class NativeMethods
     {
         [UnmanagedFunctionPointer(CallingConvention.StdCall)]
@@ -25,7 +26,7 @@ namespace SevenZip
         public static T SafeCast<T>(PropVariant var, T def)
         {
             object obj;
-            
+
             try
             {
                 obj = var.Object;
@@ -39,9 +40,10 @@ namespace SevenZip
             {
                 return expected;
             }
-            
+
             return def;
         }
     }
+
 #endif
 }

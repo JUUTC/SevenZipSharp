@@ -203,7 +203,6 @@ namespace SevenZip
         }
 
         #endregion IDisposable Members
-
     }
 
 #endif
