@@ -4,6 +4,8 @@
     using System.Diagnostics;
     using System.IO;
     using System.Runtime.Serialization.Formatters.Binary;
+    using System.Text;
+
     using NUnit.Framework;
 
     using SevenZip;
@@ -15,18 +17,21 @@
         public void SerializationTest()
         {
             var argumentException = new ArgumentException("blahblah");
-            var binaryFormatter = new BinaryFormatter();
 
             using (var ms = new MemoryStream())
             {
                 using (var fileStream = File.Create(TemporaryFile))
                 {
-                    binaryFormatter.Serialize(ms, argumentException);
+                    var json = System.Text.Json.JsonSerializer.Serialize(argumentException);
+                    var bytes = Encoding.UTF8.GetBytes(json);
+                    ms.Write(bytes, 0, bytes.Length);
+                    ms.Position = 0;
                     var compressor = new SevenZipCompressor();
                     compressor.CompressStream(ms, fileStream);
                 }
             }
         }
+
 
 #if SFX
         [Test]
