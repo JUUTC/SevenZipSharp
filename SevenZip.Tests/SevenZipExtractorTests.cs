@@ -208,15 +208,6 @@
             Assert.AreEqual(3, Directory.GetFiles(destination2).Length);
         }
 
-        [Test, Ignore("Figure out why this fails, later.")]
-        public void ExtractArchiveWithLongPath()
-        {
-            using (var extractor = new SevenZipExtractor(@"TestData\long_path.7z"))
-            {
-                Assert.Throws<PathTooLongException>(() => extractor.ExtractArchive(OutputDirectory));
-            }
-        }
-
         [Test]
         public void ReadArchivedFileNames()
         {

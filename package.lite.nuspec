@@ -11,12 +11,12 @@
         <license type="expression">LGPL-3.0-only</license>
         <projectUrl>https://github.com/squid-box/SevenZipSharp</projectUrl>
         <tags>7z sevenzip sevenzipsharp 7-zip</tags>
-        <releaseNotes>Use, .net 7, change streaminfo index to long.</releaseNotes>
+        <releaseNotes>Use, .net 8, change streaminfo index to long.</releaseNotes>
     </metadata>
     <files>
-        <file src="Stage\LiteRelease\net7.0\SevenZipSharp.dll" target="lib\net7.0" />
-        <file src="Stage\LiteRelease\net7.0\SevenZipSharp.xml" target="lib\net7.0" />
-        <file src="Stage\LiteRelease\net7.0\SevenZipSharp.pdb" target="lib\net7.0" />
+        <file src="Stage\LiteRelease\net7.0\SevenZipSharp.dll" target="lib\net8.0" />
+        <file src="Stage\LiteRelease\net7.0\SevenZipSharp.xml" target="lib\net8.0" />
+        <file src="Stage\LiteRelease\net7.0\SevenZipSharp.pdb" target="lib\net8.0" />
         <file src="license" />
         <file src="readme.md" target="docs\" />
     </files>

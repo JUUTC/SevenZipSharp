@@ -438,6 +438,7 @@ namespace SevenZip
         /// </summary>
         /// <param name="archiveName">The archive name.</param>
         /// <param name="volumeSize">The volume size.</param>
+        /// <param name="archiveStream"></param>
         public OutMultiStreamWrapper(string archiveName, long volumeSize, Stream archiveStream) :
             base(true)
         {

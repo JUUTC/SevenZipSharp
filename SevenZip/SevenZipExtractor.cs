@@ -489,7 +489,7 @@ namespace SevenZip
         /// <summary>
         /// Retrieves all information about the archive.
         /// </summary>
-        /// <exception cref="Exceptions.SevenZipArchiveException"/>
+        /// <param name="disposeStream"></param>
         private void GetArchiveInfo(bool disposeStream)
         {
             if (_archive == null)
